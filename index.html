@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI-Developer · Методичка преподавателя</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0A0C12; --bg2:#0E1119; --panel:#13161F; --panel2:#171B26;
+  --border:#232838; --border2:#2C3346;
+  --text:#EAEDF5; --muted:#99A1B5; --muted2:#6C7488;
+  --accent:#38D6E6; --cyan:#38D6E6; --violet:#A78BFA; --emerald:#34D399; --amber:#F5A623;
+  --wall:#F5A623; --ok:#34D399;
+  --shadow:0 10px 30px rgba(0,0,0,.45);
+  --radius:14px;
+}
+html[data-theme="light"]{
+  --bg:#EEF1F7; --bg2:#E7EBF3; --panel:#FFFFFF; --panel2:#F6F8FC;
+  --border:#DDE3EE; --border2:#CCD4E3;
+  --text:#171A22; --muted:#5C6478; --muted2:#8A93A6;
+  --shadow:0 10px 28px rgba(20,30,60,.10);
+}
+html[data-theme="light"] .glow{opacity:.10!important}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:'Manrope',system-ui,sans-serif;
+  background:var(--bg); color:var(--text);
+  -webkit-font-smoothing:antialiased; line-height:1.55;
+  overflow:hidden;
+}
+.m1{--accent:var(--cyan)} .m2{--accent:var(--violet)} .m3{--accent:var(--emerald)} .m4{--accent:var(--amber)}
+
+/* glows */
+.glow{position:fixed;border-radius:50%;filter:blur(120px);pointer-events:none;z-index:0}
+.glow.g1{top:-220px;right:-160px;width:520px;height:520px;background:#7C5CFC;opacity:.18}
+.glow.g2{bottom:-260px;left:-180px;width:520px;height:520px;background:#1E9CD7;opacity:.14}
+
+/* header */
+header{
+  position:fixed;top:0;left:0;right:0;height:70px;z-index:30;
+  display:flex;align-items:center;gap:18px;padding:0 22px;
+  background:rgba(10,12,18,.78);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);
+}
+html[data-theme="light"] header{background:rgba(255,255,255,.82)}
+.brand{display:flex;align-items:center;gap:13px;min-width:0}
+.logo{
+  width:40px;height:40px;border-radius:11px;flex:none;
+  background:linear-gradient(135deg,#A78BFA,#38D6E6);
+  display:grid;place-items:center;font-family:'Unbounded';font-weight:800;color:#0A0C12;font-size:18px;
+  box-shadow:0 6px 18px rgba(124,92,252,.4);
+}
+.brand h1{font-family:'Unbounded';font-weight:700;font-size:17px;letter-spacing:.2px;white-space:nowrap}
+.brand p{font-size:11.5px;color:var(--muted);font-weight:600;letter-spacing:.3px;text-transform:uppercase;margin-top:1px}
+.htools{margin-left:auto;display:flex;align-items:center;gap:11px}
+.search{position:relative}
+.search input{
+  width:300px;max-width:42vw;height:42px;border-radius:11px;border:1px solid var(--border2);
+  background:var(--panel);color:var(--text);padding:0 14px 0 40px;font-family:'Manrope';font-size:14px;outline:none;transition:.18s;
+}
+.search input:focus{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent)}
+.search svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--muted2)}
+.iconbtn{
+  width:42px;height:42px;border-radius:11px;border:1px solid var(--border2);background:var(--panel);
+  color:var(--muted);cursor:pointer;display:grid;place-items:center;transition:.18s;flex:none;
+}
+.iconbtn:hover{color:var(--text);border-color:var(--accent)}
+.menubtn{display:none}
+
+/* layout */
+.layout{position:absolute;top:70px;left:0;right:0;bottom:0;display:flex;z-index:1}
+aside{
+  width:330px;flex:none;height:100%;overflow-y:auto;border-right:1px solid var(--border);
+  padding:18px 14px 60px;background:var(--bg2);
+}
+aside::-webkit-scrollbar,main::-webkit-scrollbar{width:9px}
+aside::-webkit-scrollbar-thumb,main::-webkit-scrollbar-thumb{background:var(--border2);border-radius:8px}
+.navtop{margin-bottom:8px}
+.navtop button{
+  width:100%;text-align:left;border:1px solid var(--border);background:var(--panel);color:var(--text);
+  padding:12px 14px;border-radius:11px;cursor:pointer;font-family:'Manrope';font-weight:700;font-size:13.5px;
+  display:flex;align-items:center;gap:10px;transition:.15s;
+}
+.navtop button:hover{border-color:var(--violet)}
+.navtop button.active{border-color:var(--violet);background:color-mix(in srgb,var(--violet) 14%,var(--panel))}
+.navtop button svg{color:var(--violet)}
+
+.modgroup{margin-top:18px}
+.modhead{display:flex;align-items:center;gap:9px;padding:4px 8px 9px}
+.moddot{width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent)}
+.modhead .mt{font-family:'Unbounded';font-weight:600;font-size:11px;letter-spacing:.4px;color:var(--accent);text-transform:uppercase}
+.modhead .mm{font-size:10.5px;color:var(--muted2);font-weight:600;margin-left:auto}
+.lessrow{
+  width:100%;text-align:left;border:1px solid transparent;background:transparent;color:var(--text);
+  padding:9px 10px;border-radius:10px;cursor:pointer;display:flex;gap:11px;align-items:flex-start;transition:.14s;font-family:'Manrope';
+}
+.lessrow:hover{background:var(--panel)}
+.lessrow.active{background:color-mix(in srgb,var(--accent) 13%,var(--panel));border-color:color-mix(in srgb,var(--accent) 45%,transparent)}
+.lnum{
+  font-family:'JetBrains Mono';font-size:11px;font-weight:600;color:var(--accent);
+  background:color-mix(in srgb,var(--accent) 14%,transparent);border:1px solid color-mix(in srgb,var(--accent) 34%,transparent);
+  border-radius:7px;padding:3px 6px;flex:none;line-height:1;margin-top:1px;
+}
+.lessrow .lt{font-size:13px;font-weight:600;line-height:1.35}
+.lessrow .lt small{display:block;color:var(--muted2);font-weight:500;font-size:11px;margin-top:2px}
+
+/* main */
+main{flex:1;height:100%;overflow-y:auto;padding:34px 40px 90px;position:relative}
+.wrap{max-width:920px;margin:0 auto;animation:fade .4s ease}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+.crumb{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted2);font-weight:600;margin-bottom:14px;text-transform:uppercase;letter-spacing:.4px}
+.crumb .moddot{width:8px;height:8px}
+h2.ltitle{font-family:'Unbounded';font-weight:700;font-size:30px;line-height:1.12;letter-spacing:-.3px}
+.meta{display:flex;flex-wrap:wrap;gap:9px;margin:16px 0 8px}
+.chip{font-size:12px;font-weight:600;padding:6px 11px;border-radius:8px;border:1px solid var(--border2);color:var(--muted);background:var(--panel)}
+.chip.type{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 40%,transparent);background:color-mix(in srgb,var(--accent) 12%,transparent)}
+.chip.flag{color:#0A0C12;background:var(--wall);border-color:var(--wall);font-weight:800}
+
+.sect{margin-top:28px}
+.sect h3{
+  font-family:'Manrope';font-weight:800;font-size:12px;letter-spacing:1.2px;text-transform:uppercase;
+  color:var(--muted2);margin-bottom:13px;display:flex;align-items:center;gap:9px;
+}
+.sect h3 .bar{width:18px;height:2px;background:var(--accent);border-radius:2px}
+.lead{font-size:16.5px;color:var(--text);line-height:1.6}
+.lead.muted{color:var(--muted)}
+
+.callout{
+  border:1px solid color-mix(in srgb,var(--accent) 40%,transparent);
+  background:color-mix(in srgb,var(--accent) 9%,var(--panel));
+  border-radius:var(--radius);padding:18px 20px;position:relative;overflow:hidden;
+}
+.callout:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--accent)}
+.callout .cl{display:flex;align-items:center;gap:9px;font-size:12px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--accent);margin-bottom:7px}
+.callout p{font-size:15.5px;line-height:1.55}
+
+.hook{
+  border:1px solid color-mix(in srgb,var(--accent) 45%,transparent);
+  background:linear-gradient(135deg,color-mix(in srgb,var(--accent) 14%,var(--panel)),var(--panel));
+  border-radius:var(--radius);padding:20px 22px;display:flex;gap:16px;align-items:flex-start;
+}
+.hook .hi{
+  width:42px;height:42px;border-radius:11px;flex:none;display:grid;place-items:center;
+  background:color-mix(in srgb,var(--accent) 22%,transparent);color:var(--accent);
+}
+.hook .hl{font-size:11.5px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--accent);margin-bottom:5px}
+.hook p{font-size:15px;line-height:1.55}
+
+.tools{display:flex;flex-wrap:wrap;gap:9px}
+.tool{
+  font-family:'JetBrains Mono';font-size:12.5px;font-weight:500;padding:7px 12px;border-radius:9px;
+  border:1px solid var(--border2);background:var(--panel);color:var(--text);
+  display:flex;align-items:center;gap:8px;
+}
+.tool:before{content:"";width:7px;height:7px;border-radius:2px;background:var(--accent)}
+
+/* stages timeline */
+.stage{display:flex;gap:16px;padding:0 0 4px}
+.stage:not(:last-child) .stime:after{content:"";position:absolute;left:50%;top:34px;bottom:-14px;width:2px;transform:translateX(-50%);background:var(--border2)}
+.stime{position:relative;flex:none;width:78px}
+.stime span{
+  font-family:'JetBrains Mono';font-size:11px;font-weight:600;color:var(--accent);
+  border:1px solid color-mix(in srgb,var(--accent) 34%,transparent);background:color-mix(in srgb,var(--accent) 10%,transparent);
+  border-radius:8px;padding:6px 4px;display:block;text-align:center;line-height:1.2;
+}
+.sbody{padding-bottom:20px;border-bottom:1px dashed transparent}
+.sbody h4{font-size:15px;font-weight:700;margin-bottom:3px}
+.sbody p{font-size:14px;color:var(--muted);line-height:1.5}
+
+/* prompts */
+.prompt{border:1px solid var(--border2);background:var(--panel);border-radius:var(--radius);overflow:hidden;margin-bottom:14px}
+.prompt-head{display:flex;align-items:center;gap:10px;padding:13px 16px;border-bottom:1px solid var(--border);flex-wrap:wrap}
+.who{font-size:11px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;padding:4px 9px;border-radius:7px}
+.who.student{color:var(--cyan);background:color-mix(in srgb,var(--cyan) 14%,transparent);border:1px solid color-mix(in srgb,var(--cyan) 34%,transparent)}
+.who.teacher{color:var(--violet);background:color-mix(in srgb,var(--violet) 14%,transparent);border:1px solid color-mix(in srgb,var(--violet) 34%,transparent)}
+.pctx{font-family:'JetBrains Mono';font-size:11.5px;color:var(--muted2)}
+.plabel{font-size:13px;color:var(--muted);font-weight:600}
+.copy{
+  margin-left:auto;border:1px solid var(--border2);background:var(--panel2);color:var(--muted);cursor:pointer;
+  font-family:'Manrope';font-weight:700;font-size:11.5px;padding:6px 11px;border-radius:8px;display:flex;align-items:center;gap:6px;transition:.15s;
+}
+.copy:hover{color:var(--text);border-color:var(--accent)}
+.copy.done{color:var(--ok);border-color:var(--ok)}
+.prompt pre{
+  font-family:'JetBrains Mono';font-size:13px;line-height:1.6;color:var(--text);
+  padding:16px;white-space:pre-wrap;word-break:break-word;background:var(--bg2);
+}
+
+.portfolio{display:inline-flex;align-items:center;gap:10px;border:1px solid color-mix(in srgb,var(--ok) 40%,transparent);background:color-mix(in srgb,var(--ok) 10%,var(--panel));color:var(--ok);font-weight:700;font-size:14px;padding:11px 16px;border-radius:11px}
+
+.wallbanner{
+  border:1px solid var(--wall);background:color-mix(in srgb,var(--wall) 12%,var(--panel));
+  border-radius:var(--radius);padding:16px 20px;display:flex;gap:14px;align-items:flex-start;margin-bottom:6px;
+}
+.wallbanner .wi{color:var(--wall);flex:none}
+.wallbanner b{color:var(--wall)}
+.wallbanner p{font-size:14.5px;line-height:1.5}
+
+/* intro/methodology */
+.introhero h2{font-family:'Unbounded';font-weight:800;font-size:32px;line-height:1.1;letter-spacing:-.4px}
+.introhero p.sub{font-size:16px;color:var(--muted);margin-top:12px;max-width:680px}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px}
+.card{border:1px solid var(--border2);background:var(--panel);border-radius:var(--radius);padding:18px}
+.card .ct{font-family:'Unbounded';font-weight:600;font-size:13px;letter-spacing:.3px;display:flex;align-items:center;gap:9px}
+.card p{font-size:13.5px;color:var(--muted);margin-top:9px;line-height:1.5}
+.card .ident{font-size:13px;font-weight:700;margin-top:11px;padding-top:11px;border-top:1px solid var(--border)}
+.mtpl{counter-reset:step;display:flex;flex-direction:column;gap:11px}
+.mtpl .row{display:flex;gap:14px;align-items:flex-start;border:1px solid var(--border2);background:var(--panel);border-radius:12px;padding:13px 16px}
+.mtpl .rt{font-family:'JetBrains Mono';font-size:11.5px;font-weight:600;color:var(--cyan);flex:none;width:84px;border:1px solid color-mix(in srgb,var(--cyan) 30%,transparent);background:color-mix(in srgb,var(--cyan) 10%,transparent);border-radius:8px;padding:6px 4px;text-align:center}
+.mtpl h4{font-size:14.5px;font-weight:700}
+.mtpl p{font-size:13.5px;color:var(--muted);margin-top:2px}
+.legend{display:flex;flex-direction:column;gap:10px}
+.legend .li{display:flex;gap:12px;align-items:flex-start;font-size:14px;color:var(--muted)}
+.legend .li b{color:var(--text)}
+.philo{border:1px solid color-mix(in srgb,var(--violet) 35%,transparent);background:color-mix(in srgb,var(--violet) 8%,var(--panel));border-radius:var(--radius);padding:20px 22px}
+.philo p{font-size:15px;line-height:1.6;margin-bottom:10px}
+.philo p:last-child{margin-bottom:0}
+.philo .acc{color:var(--violet);font-weight:700}
+
+.hidden{display:none!important}
+.empty{color:var(--muted2);font-size:13px;text-align:center;padding:30px}
+
+@media(max-width:900px){
+  .menubtn{display:grid}
+  aside{position:fixed;left:0;top:70px;bottom:0;z-index:25;transform:translateX(-100%);transition:.25s;box-shadow:var(--shadow)}
+  aside.open{transform:none}
+  main{padding:24px 18px 80px}
+  .search input{width:160px}
+  .cards{grid-template-columns:1fr}
+  h2.ltitle{font-size:24px}
+}
+@media(max-width:600px){
+  header{gap:10px;padding:0 12px}
+  .brand{gap:9px;flex:none;margin-right:2px}
+  .brand .txt{display:none}
+  .htools{gap:8px;flex:1;min-width:0}
+  .search{flex:1;min-width:0}
+  .search input{width:100%;max-width:none}
+  h2.ltitle{font-size:21px;line-height:1.18}
+}
+</style>
+</head>
+<body>
+<div class="glow g1"></div><div class="glow g2"></div>
+
+<header>
+  <button class="iconbtn menubtn" id="menuBtn" aria-label="Меню">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+  <div class="brand">
+    <div class="logo">AI</div>
+    <div class="txt">
+      <h1>AI-Developer</h1>
+      <p>Методичка преподавателя</p>
+    </div>
+  </div>
+  <div class="htools">
+    <div class="search">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="search" type="text" placeholder="Поиск урока или инструмента…">
+    </div>
+    <button class="iconbtn" id="themeBtn" aria-label="Тема">
+      <svg id="themeIcon" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/></svg>
+    </button>
+  </div>
+</header>
+
+<div class="layout">
+  <aside id="aside">
+    <div class="navtop">
+      <button id="introBtn" class="active" onclick="showIntro()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="8"/><line x1="12" y1="11" x2="12" y2="16"/></svg>
+        Как пользоваться · методология
+      </button>
+    </div>
+    <div id="nav"></div>
+  </aside>
+  <main id="main"></main>
+</div>
+
+<script>
+/* ====================== ДАННЫЕ КУРСА ====================== */
+const MODULES = [
+{
+  id:1, cls:'m1', month:'Месяц 1',
+  title:'Знакомство с ИИ-инструментами и первые приложения',
+  goal:'Освоить инструменты, научиться ставить задачу через PRD/SPEC и собрать первые работающие приложения.',
+  identity:'«Я умею собирать работающие приложения»',
+  lessons:[
+    { n:'1.1', title:'Знакомство с Google AI Studio и конструкторами Lovable, Replit, Base44',
+      type:'Вводный',
+      isNew:'Студент впервые видит, как приложение рождается из текстового описания за минуты — эффект «вау» с первого занятия.',
+      short:'Обзорный урок: знакомство с самой идеей создания приложений через ИИ. Студент пробует 3–4 конструктора «без кода» и сразу получает первый результат.',
+      tools:['Google AI Studio','Lovable','Replit','Base44'],
+      stages:[
+        {t:'0–10 мин',h:'Вступление и «вершина курса»',d:'Показать финальные проекты выпускников и капстоун. Обозначить «денежную лестницу»: игрушки → первые заказы → продукты за деньги → дорогие AI-системы. Студент должен увидеть, куда придёт.'},
+        {t:'10–30 мин',h:'Что такое AI-разработка',d:'Чем отличается от классической разработки. Демонстрация Google AI Studio. Идея: мы управляем ИИ, а не пишем весь код руками.'},
+        {t:'30–60 мин',h:'Практика в Lovable',d:'Каждый студент собирает простой сайт по текстовому описанию. Учимся формулировать запрос.'},
+        {t:'60–80 мин',h:'Сравнение конструкторов',d:'Replit и Base44 — где что сильнее, плюсы и минусы no-code. Когда это удобно, а когда мешает.'},
+        {t:'80–90 мин',h:'Итог и крючок',d:'«Конструкторы — это игрушки. Дальше берём настоящие инструменты разработчика». Домашка: собрать свой мини-сайт.'}
+      ],
+      prompts:[
+        {who:'student',ctx:'Lovable',label:'Первый сайт',text:'Создай одностраничный сайт-визитку для кофейни: герой-блок с названием и кнопкой, меню из 6 позиций с ценами, блок «о нас» и форма обратной связи. Современный дизайн, адаптив под телефон.'},
+        {who:'student',ctx:'Base44',label:'Мини-приложение',text:'Создай простое приложение «список дел»: добавление задачи, отметка о выполнении, удаление задачи. Минималистичный интерфейс.'}
+      ],
+      hook:'Ты собрал сайт за 10 минут — но управлял мышкой. На следующем уроке возьмём в руки тот же инструмент, которым пользуются настоящие разработчики, и почувствуешь разницу в мощности.',
+      portfolio:'Первый сайт в конструкторе'
+    },
+    { n:'1.2', title:'Инструменты курса + Gemini CLI в VS Code',
+      type:'Настройка',
+      isNew:'Переход от «кликания мышкой» к управлению ИИ через терминал — ощущение настоящего разработчика.',
+      short:'Настройка рабочего окружения: VS Code, установка и запуск Gemini CLI, первые команды. Студент начинает «командовать» ИИ из терминала.',
+      tools:['VS Code','Gemini CLI','Терминал'],
+      stages:[
+        {t:'0–10 мин',h:'Recap + петля',d:'«Вчера кликали мышкой, сегодня командуем словами». Зачем разработчику терминал.'},
+        {t:'10–30 мин',h:'Установка окружения',d:'VS Code, нужные расширения, установка Gemini CLI и авторизация. Преподаватель идёт по шагам, студенты повторяют.'},
+        {t:'30–55 мин',h:'Первые команды',d:'Как давать задачу, как ИИ читает и пишет файлы проекта прямо в папке. Чем CLI мощнее конструктора.'},
+        {t:'55–80 мин',h:'Практика',d:'Сгенерировать простую страницу через Gemini CLI и внести правки итеративно, шаг за шагом.'},
+        {t:'80–90 мин',h:'Типовые ошибки + крючок',d:'Разбор частых проблем установки. Крючок к первой игре.'}
+      ],
+      prompts:[
+        {who:'teacher',ctx:'Терминал',label:'Установка (проверить актуальную команду в документации)',text:'npm install -g @google/gemini-cli'},
+        {who:'student',ctx:'Gemini CLI',label:'Первая генерация',text:'Создай страницу с заголовком, кнопкой и счётчиком кликов на чистом HTML, CSS и JavaScript в одном файле.'},
+        {who:'student',ctx:'Gemini CLI',label:'Итерация',text:'Измени цвет кнопки на фиолетовый и добавь плавную анимацию при нажатии.'}
+      ],
+      hook:'Окружение готово. На следующем уроке соберём первую настоящую игру — и ты поймёшь, что ИИ пишет не только странички, но и логику.'
+    },
+    { n:'1.3', title:'Gemini CLI: генерация кода. Создаём игру «Змейка»',
+      type:'Проект',
+      isNew:'ИИ пишет игровую логику — движение, столкновения, очки. Студент видит, что можно делать не только сайты.',
+      short:'Первый полноценный проект — классическая «Змейка» целиком через Gemini CLI. Запуск, кастомизация, разбор багов.',
+      tools:['Gemini CLI','HTML / CSS / JavaScript','Canvas'],
+      stages:[
+        {t:'0–10 мин',h:'Recap + цель урока',d:'Показать готовую «Змейку» как результат, к которому придём за урок.'},
+        {t:'10–20 мин',h:'Из чего состоит игра',d:'Поле, змейка, еда, очки, конец игры. Раскладываем задачу на части перед генерацией.'},
+        {t:'20–65 мин',h:'Пошаговая сборка',d:'Генерация через промпты, запуск, итеративные правки. Учимся читать результат и просить исправления.'},
+        {t:'65–80 мин',h:'Кастомизация',d:'Скорость, цвета, рекорд, экран Game Over, управление с телефона.'},
+        {t:'80–90 мин',h:'Закрепление + крючок',d:'Частые баги и как их формулировать ИИ. Крючок к Git.'}
+      ],
+      prompts:[
+        {who:'student',ctx:'Gemini CLI',label:'Создание игры',text:'Создай игру «Змейка» на HTML, CSS и JavaScript в одном файле, используя Canvas. Управление стрелками, очки за съеденную еду, рост змейки, экран Game Over с кнопкой рестарта.'},
+        {who:'student',ctx:'Gemini CLI',label:'Улучшение',text:'Добавь подсчёт рекорда и плавное увеличение скорости по мере роста змейки.'},
+        {who:'student',ctx:'Gemini CLI',label:'Адаптив',text:'Сделай игровое поле адаптивным и добавь управление свайпами для телефона.'}
+      ],
+      hook:'Игра есть, но она живёт только на твоём компьютере. А если ноутбук сломается — всё пропадёт. На следующем уроке научимся сохранять проекты так, чтобы их видел весь мир.',
+      portfolio:'Игра «Змейка»'
+    },
+    { n:'1.4', title:'Gemini + OpenCode + Git/GitHub',
+      type:'Инструменты',
+      isNew:'Проекты больше не живут только на ноутбуке — появляется «портфолио в облаке» и второй ИИ-инструмент (OpenCode).',
+      short:'Знакомство с OpenCode как вторым агентом и системой контроля версий: сохранение проектов в Git, публикация на GitHub и в интернете по ссылке.',
+      tools:['OpenCode','Git','GitHub','GitHub Pages'],
+      stages:[
+        {t:'0–10 мин',h:'Recap + петля',d:'«Как не потерять проект и начать показывать его людям».'},
+        {t:'10–30 мин',h:'Git и GitHub простыми словами',d:'Зачем нужна история версий и облако. Установка и настройка.'},
+        {t:'30–50 мин',h:'Знакомство с OpenCode',d:'Второй ИИ-агент, его отличия и сильные стороны относительно Gemini CLI.'},
+        {t:'50–75 мин',h:'Практика: первый репозиторий',d:'Инициализация, первый коммит, публикация «Змейки» на GitHub.'},
+        {t:'75–90 мин',h:'Публикация по ссылке',d:'GitHub Pages — игра доступна по ссылке. Крючок к Salary App.'}
+      ],
+      prompts:[
+        {who:'student',ctx:'Терминал',label:'Сохранение в Git',text:'git init\ngit add .\ngit commit -m "Snake game"\ngit push'},
+        {who:'student',ctx:'OpenCode',label:'README и пояснения',text:'Объясни простыми словами, что делает каждая команда git в этом проекте, и создай файл README с описанием игры «Змейка».'}
+      ],
+      hook:'Теперь у тебя есть ссылка на проект — его можно показывать. Но это всё ещё игрушки. Со следующего урока начинаем собирать приложение, которое решает реальную задачу с деньгами.'
+    },
+    { n:'1.5', title:'Salary App. PRD + SPEC. Frontend через Gemini CLI',
+      type:'Проект',
+      isNew:'Студент впервые проектирует приложение ДО написания кода — пишет PRD и SPEC. Это ключевой навык профессии: «мусор на входе = мусор на выходе».',
+      short:'Старт первого «взрослого» проекта — приложения учёта доходов и расходов. Учимся писать PRD и SPEC, собираем фронтенд по техзаданию.',
+      tools:['Gemini CLI','PRD / SPEC','React + Vite'],
+      stages:[
+        {t:'0–10 мин',h:'Recap + зачем PRD',d:'Почему без техзадания ИИ выдаёт случайный результат. Вводим понятия PRD и SPEC.'},
+        {t:'10–30 мин',h:'Пишем PRD вместе',d:'Формулируем функции Salary App: доходы, расходы, категории, итоговый баланс.'},
+        {t:'30–45 мин',h:'PRD → SPEC',d:'Превращаем продуктовое описание в техническое задание для разработки.'},
+        {t:'45–80 мин',h:'Сборка фронтенда',d:'Генерируем интерфейс через Gemini CLI по SPEC, дорабатываем итерациями.'},
+        {t:'80–90 мин',h:'Проверка + крючок',d:'Проверяем, что интерфейс работает. Крючок к бэкенду.'}
+      ],
+      prompts:[
+        {who:'student',ctx:'Gemini CLI / Chat',label:'Запрос PRD',text:'Я хочу создать веб-приложение для учёта личных финансов.\nПриложение должно отслеживать мои доходы и расходы (я ввожу данные вручную).\nНужно учесть важные расходы: подписки, коммуналка, продукты, аренда и так далее.\nТакже нужно отслеживать зарплату: я указываю места работы и доходы и суммирую всё вместе.\nсоздай для меня PRD'},
+        {who:'student',ctx:'Gemini CLI / Chat',label:'Запрос SPEC',text:'На основе этого PRD составь подробный SPEC для разработки: список страниц, компоненты, структура данных и технологии (React + Vite).'},
+        {who:'student',ctx:'Gemini CLI',label:'Сборка фронта',text:'Собери фронтенд приложения по этому SPEC: формы ввода доходов и расходов, список операций, итоговый баланс. React + Vite, аккуратный современный интерфейс.'}
+      ],
+      hook:'Интерфейс красивый, но данные исчезают при перезагрузке страницы. На следующем уроке прикрутим бэкенд — и приложение начнёт по-настоящему помнить твои деньги.'
+    },
+    { n:'1.6', title:'Salary App. Backend через OpenCode (Big Pickle)',
+      type:'Проект',
+      isNew:'Первый бэкенд: данные сохраняются навсегда. Студент впервые понимает, что такое сервер и база данных — через ИИ, без боли.',
+      short:'Достраиваем Salary App: серверная часть и хранение данных через OpenCode. Полный цикл: ввёл → сохранилось → перезагрузил → на месте.',
+      tools:['OpenCode','Node.js','SQLite','REST API'],
+      stages:[
+        {t:'0–10 мин',h:'Recap + петля',d:'«Данные пропадают» — почему и что с этим делать.'},
+        {t:'10–25 мин',h:'Бэкенд и БД простыми словами',d:'Что такое сервер, база данных и API. Зачем приложению «память».'},
+        {t:'25–70 мин',h:'Сборка бэкенда',d:'Генерируем сервер и подключаем БД через OpenCode, связываем с фронтендом.'},
+        {t:'70–85 мин',h:'Проверка полного цикла',d:'Тестируем сохранение и загрузку данных после перезагрузки.'},
+        {t:'85–90 мин',h:'Крючок',d:'Переход к автоматизации без кода — N8N.'}
+      ],
+      prompts:[
+        {who:'student',ctx:'OpenCode',label:'Создание бэкенда',text:'Создай бэкенд для приложения учёта финансов на Node.js с базой данных SQLite: сохранение доходов и расходов, получение списка операций и итогового баланса. Сделай REST API.'},
+        {who:'student',ctx:'OpenCode',label:'Связка с фронтом',text:'Подключи фронтенд к этому API: при добавлении операции данные сохраняются на сервере и подгружаются при загрузке страницы.'}
+      ],
+      hook:'Ты собрал полноценное приложение с фронтом и бэком. Но что, если часть работы можно вообще не программировать, а собрать мышкой из блоков? На следующем уроке — автоматизация.',
+      portfolio:'Salary App (фронтенд + бэкенд)'
+    },
+    { n:'1.7', title:'N8N. Автоматизация бэкенда. Проект «Примерочная». Часть 1',
+      type:'Проект',
+      isNew:'Целый бэкенд без единой строки кода — визуальная автоматизация из блоков. Новый класс инструмента.',
+      short:'Знакомство с N8N: собираем серверную логику из визуальных блоков. Старт проекта «Примерочная» — проектируем и собираем сценарий.',
+      tools:['N8N','Вебхуки','Визуальная автоматизация'],
+      stages:[
+        {t:'0–10 мин',h:'Recap + что такое автоматизация',d:'Где автоматизация экономит часы рутинной работы.'},
+        {t:'10–30 мин',h:'Интерфейс N8N',d:'Ноды, триггеры, связи между блоками. Логика «данные текут по схеме».'},
+        {t:'30–55 мин',h:'Проектируем «Примерочную»',d:'Раскладываем логику: что на входе, какие шаги, что на выходе.'},
+        {t:'55–85 мин',h:'Собираем сценарий',d:'Первый рабочий воркфлоу в N8N.'},
+        {t:'85–90 мин',h:'Крючок',d:'Логика готова — дальше нужен красивый интерфейс.'}
+      ],
+      prompts:[
+        {who:'student',ctx:'Chat / планирование',label:'Проектирование логики',text:'Помоги спроектировать логику бэкенда для приложения-примерочной: пользователь загружает фото, выбирает одежду и получает результат. Разбей процесс на пошаговые блоки для автоматизации в N8N.'}
+      ],
+      hook:'Логика работает. Но пользователю нужно красивое окно, а не схема из блоков. На следующем уроке соберём лицо проекта.'
+    },
+    { n:'1.8', title:'N8N. Проект «Примерочная». Frontend. Часть 2',
+      type:'Проект · Финал блока',
+      flag:'СТЕНА',
+      isNew:'Первый проект, где фронтенд и автоматизированный бэкенд работают вместе. И первое честное осознание: чего ещё не хватает, чтобы продать результат.',
+      short:'Завершаем «Примерочную»: фронтенд + связка с N8N. Финал первого блока и сознательное столкновение студентов с «потолком» текущих умений.',
+      tools:['Фронтенд','N8N (интеграция)','Вебхуки'],
+      wall:'Это ключевой урок удержания. Первый блок НЕ должен ощущаться как победный финал — иначе студент «выдохнет» и уйдёт. Дайте группе яркий результат, но в конце честно покажите потолок: попробуйте отдать ссылку «клиенту» и вместе упритесь в реальные вопросы. Затем сразу разверните карту пути на месяцы 2–4.',
+      stages:[
+        {t:'0–10 мин',h:'Recap всего месяца',d:'«Посмотри, сколько ты уже умеешь»: от нуля до full-stack приложения с автоматизацией.'},
+        {t:'10–55 мин',h:'Сборка фронтенда',d:'Интерфейс «Примерочной» и связка с готовым вебхуком N8N.'},
+        {t:'55–70 мин',h:'Демонстрация группой',d:'Каждый показывает работающий проект — социальный момент гордости.'},
+        {t:'70–82 мин',h:'«Стена»: упираемся в потолок',d:'Пробуем дать ссылку «клиенту». Всплывают вопросы: как задеплоить, чтобы не падало? как принять оплату? как взять заказ? Честный разговор о том, чего пока не хватает.'},
+        {t:'82–90 мин',h:'Карта пути вперёд',d:'Разворачиваем лестницу: месяц 2 — первые продаваемые продукты и агенты, месяц 3 — деньги и платежи, месяц 4 — Claude и дорогие AI-системы. Сильный крючок.'}
+      ],
+      prompts:[
+        {who:'student',ctx:'Gemini CLI / OpenCode',label:'Фронтенд проекта',text:'Собери фронтенд для приложения-примерочной: загрузка фото, выбор одежды, кнопка «примерить», показ результата. Подключи к готовому вебхуку N8N.'}
+      ],
+      hook:'Ты за месяц прошёл путь от нуля до full-stack приложения с автоматизацией. Но всё это пока на твоём ноутбуке и бесплатно. Со следующего месяца превращаем поделки в то, за что платят: ИИ-агенты и первые продаваемые продукты. И это лишь треть пути — впереди самое ценное.',
+      portfolio:'Проект «Примерочная»'
+    }
+  ]
+},
+{
+  id:2, cls:'m2', month:'Месяц 2',
+  title:'AI-агенты и быстрые продукты',
+  goal:'Научиться собирать ИИ-агентов и быстро создавать ликвидные продукты для первых заказов.',
+  identity:'«Я фрилансер — беру первые заказы»',
+  lessons:[
+    { n:'2.1', title:'Прокачиваем Gemini — внедряем Skills',
+      type:'Инструменты',
+      isNew:'Агент перестаёт быть «универсальным» — его можно затачивать под конкретные задачи через Skills. Шаг к профессиональному использованию.',
+      short:'Усиливаем Gemini через Skills: учим агента выполнять повторяемые задачи лучше и по нашим правилам.',
+      tools:['Gemini CLI','Skills'],
+      stages:[
+        {t:'0–10 мин',h:'Recap месяца 1 + петля',d:'«Делаем инструменты умнее под себя».'},
+        {t:'10–35 мин',h:'Что такое Skills',d:'Зачем нужны, как подключаются, какие задачи закрывают.'},
+        {t:'35–75 мин',h:'Практика',d:'Создаём 1–2 Skill под повторяемую задачу (например, генерация структуры лендинга).'},
+        {t:'75–90 мин',h:'Где пригодится + крючок',d:'Как Skills ускоряют будущие заказы. Крючок к первому агенту.'}
+      ],
+      prompts:[
+        {who:'student',ctx:'Gemini CLI',label:'Создание Skill',text:'Создай Skill для Gemini, который по короткому описанию бизнеса генерирует структуру лендинга: блоки, заголовки и тексты кнопок.'}
+      ],
+      hook:'Ты прокачал инструмент под себя. На следующем уроке построим первого настоящего ИИ-агента — то, что бизнесы заказывают прямо сейчас.'
+    },
+    { n:'2.2', title:'Antigravity + AI Support Agent №1 (Frontend + Problem Solving)',
+      type:'Проект',
+      isNew:'Новая среда разработки Antigravity и старт первого ИИ-агента, который «разговаривает» с пользователем.',
+      short:'Установка Antigravity и старт проекта ИИ-агента поддержки: собираем интерфейс чата и закладываем подход к решению проблем.',
+      tools:['Antigravity','Фронтенд агента'],
+      stages:[
+        {t:'0–10 мин',h:'Recap + петля',d:'«Строим продукт, который заказывают бизнесы».'},
+        {t:'10–30 мин',h:'Установка Antigravity',d:'Настройка новой среды, отличия от прежних инструментов.'},
+        {t:'30–45 мин',h:'Подход Problem Solving',d:'Как методично разбивать задачу и вести агента к решению.'},
+        {t:'45–80 мин',h:'Сборка интерфейса чата',d:'Окно сообщений, поле ввода, индикатор набора, адаптив.'},
+        {t:'80–90 мин',h:'Крючок',d:'Лицо есть — дальше дадим агенту мозг.'}
+      ],
+      prompts:[
+        {who:'student',ctx:'Antigravity',label:'Интерфейс агента',text:'Создай интерфейс чата для ИИ-агента поддержки: окно сообщений, поле ввода, кнопка отправки, индикатор набора текста. Современный дизайн, адаптив под телефон.'}
+      ],
+      hook:'Лицо агента готово, но он пока не думает. На следующем уроке дадим ему мозг — серверную часть.'
+    },
+    { n:'2.3', title:'AI Support Agent №2 (Backend + Problem Solving)',
+      type:'Проект',
+      isNew:'Агент начинает реально отвечать — подключаем «мозг» (LLM) к интерфейсу.',
+      short:'Бэкенд агента поддержки: подключение к LLM, обработка запросов и логика ответов.',
+      tools:['Node.js','Подключение к LLM','Antigravity'],
+      stages:[
+        {t:'0–10 мин',h:'Recap + петля',d:'«Оживляем агента».'},
+        {t:'10–25 мин',h:'Как агент думает',d:'Системный промпт, роль агента, как формируется ответ.'},
+        {t:'25–70 мин',h:'Сборка бэкенда',d:'Принимаем сообщение, отправляем в LLM, возвращаем ответ. Связываем с фронтом.'},
+        {t:'70–85 мин',h:'Проверка диалога',d:'Тестируем живой разговор с агентом.'},
+        {t:'85–90 мин',h:'Крючок',d:'Агент путается и код грязный — дальше наведём порядок.'}
+      ],
+      prompts:[
+        {who:'student',ctx:'Antigravity / Node.js',label:'Бэкенд агента',text:'Создай бэкенд для агента поддержки на Node.js: принимает сообщение пользователя, отправляет его в LLM с системным промптом «ты вежливый помощник поддержки», возвращает ответ на фронтенд.'}
+      ],
+      hook:'Агент отвечает. Но иногда путается, а код становится грязным. На следующем уроке научимся чинить и наводить порядок — навык, который отличает профи от любителя.'
+    },
+    { n:'2.4', title:'AI Support Agent №3 (Problem Solving + Refactoring)',
+      type:'Проект',
+      isNew:'Рефакторинг и отладка с ИИ — то, чего нет в «быстрых» туториалах. Именно это делает проект продаваемым.',
+      short:'Доводим агента до товарного вида: отладка, рефакторинг кода, улучшение качества ответов, обработка ошибок и история диалога.',
+      tools:['Antigravity','Рефакторинг','Отладка'],
+      stages:[
+        {t:'0–10 мин',h:'Recap + петля',d:'«Превращаем рабочий прототип в продукт».'},
+        {t:'10–30 мин',h:'Что такое рефакторинг',d:'Зачем чистить код и как просить это у ИИ осмысленно.'},
+        {t:'30–70 мин',h:'Практика',d:'Поиск слабых мест, рефакторинг, обработка ошибок, сохранение истории диалога.'},
+        {t:'70–85 мин',h:'Финальная проверка',d:'Агент стабилен и готов к показу клиенту.'},
+        {t:'85–90 мин',h:'Крючок',d:'Первый продукт готов — дальше серия быстрых продаваемых проектов.'}
+      ],
+      prompts:[
+        {who:'student',ctx:'Antigravity',label:'Рефакторинг',text:'Проанализируй код проекта, найди слабые места и предложи рефакторинг. Объясни каждое изменение простыми словами.'},
+        {who:'student',ctx:'Antigravity',label:'Надёжность',text:'Добавь обработку ошибок и сохранение истории диалога между сообщениями.'}
+      ],
+      hook:'У тебя готовый ИИ-агент — первый продукт на продажу. Дальше — серия быстрых продуктов, каждый из которых можно отдать клиенту. Начнём с того, что нужно каждому блогеру и бизнесу.',
+      portfolio:'AI Support Agent'
+    },
+    { n:'2.5', title:'AI-генератор контента для соцсетей',
+      type:'Проект · 1 урок',
+      isNew:'Первый продукт «за один урок». Студент видит скорость, с которой теперь делает товарные вещи.',
+      short:'За один урок — приложение, которое генерирует посты, заголовки и хэштеги для соцсетей. С историей и кнопкой копирования.',
+      tools:['Next.js','LLM','Стриминг ответа'],
+      stages:[
+        {t:'0–10 мин',h:'Recap + петля',d:'«Делаем продукт, который покупают SMM-щики».'},
+        {t:'10–25 мин',h:'PRD продукта',d:'Формулируем функции генератора вместе.'},
+        {t:'25–75 мин',h:'Сборка',d:'Генерируем приложение по SPEC: ввод темы, выбор соцсети и тона, варианты постов, история.'},
+        {t:'75–85 мин',h:'Проверка',d:'Тестируем генерацию и стриминг текста.'},
+        {t:'85–90 мин',h:'Крючок',d:'Продукт для бизнеса готов — дальше продукт для каждого человека.'}
+      ],
+      prompts:[
+        {who:'student',ctx:'Chat',label:'Запрос PRD',text:'Я хочу создать веб-приложение для генерации контента для соцсетей с помощью ИИ.\nЯ ввожу тему или описание бизнеса, выбираю соцсеть (Instagram, Telegram, LinkedIn) и тон (продающий, дружелюбный, экспертный).\nИИ генерирует готовый пост: заголовок, текст, призыв к действию и хэштеги.\nХочу несколько вариантов на выбор, перегенерацию, постепенный вывод текста и историю постов с копированием в один клик.\nСтек: фронтенд на Next.js.\nсоздай для меня PRD'},
+        {who:'student',ctx:'Gemini CLI / Antigravity',label:'Сборка по SPEC',text:'Составь SPEC по этому PRD и собери приложение: ввод темы, выбор соцсети и тона, генерация нескольких вариантов поста с постепенным выводом текста и историей.'}
+      ],
+      hook:'Это можно продать любому SMM-специалисту. Дальше — продукт, который нужен каждому человеку, а не только бизнесу.',
+      portfolio:'AI-генератор контента'
+    },
+    { n:'2.6', title:'AI-конструктор резюме и портфолио. Часть 1',
+      type:'Проект',
+      isNew:'Продукт для массового рынка (B2C). Работа с шаблонами оформления и динамической генерацией текста.',
+      short:'Старт проекта: студент заполняет форму, а ИИ красиво формулирует резюме. Несколько шаблонов и цветовых тем.',
+      tools:['Next.js','Node.js','LLM'],
+      stages:[
+        {t:'0–10 мин',h:'Recap + петля',d:'«Продукт, который купит любой соискатель».'},
+        {t:'10–25 мин',h:'PRD',d:'Функции конструктора резюме и мини-сайта портфолио.'},
+        {t:'25–80 мин',h:'Сборка ядра',d:'Форма данных → ИИ формулирует описания → сборка резюме по шаблону.'},
+        {t:'80–90 мин',h:'Крючок',d:'Резюме собирается — дальше отдадим его красиво.'}
+      ],
+      prompts:[
+        {who:'student',ctx:'Chat',label:'Запрос PRD',text:'Я хочу создать веб-приложение «конструктор резюме и мини-сайта портфолио» с помощью ИИ.\nЯ заполняю форму: имя, должность, опыт, навыки, образование, контакты.\nИИ сам формулирует описания и подчёркивает сильные стороны, собирает готовое резюме.\nНесколько шаблонов оформления и смена цветовой темы. Адаптив под телефон и компьютер.\nСтек: фронтенд на Next.js, бэкенд на Node.js.\nсоздай для меня PRD'},
+        {who:'student',ctx:'Antigravity',label:'Сборка',text:'Собери приложение по этому SPEC: форма ввода данных, генерация описаний через ИИ, выбор шаблона и цветовой темы, предпросмотр резюме.'}
+      ],
+      hook:'Резюме генерируется. На следующем уроке научимся отдавать его красиво — экспорт в PDF и публичная ссылка-портфолио.'
+    },
+    { n:'2.7', title:'AI-конструктор резюме и портфолио. Часть 2',
+      type:'Проект',
+      isNew:'Экспорт в PDF и «публичная страница по ссылке» — новые товарные фичи, которые повышают цену продукта.',
+      short:'Завершение: экспорт готового резюме в PDF, публикация как страницы-портфолио по ссылке, финальная адаптация.',
+      tools:['PDF-экспорт','Публикация страницы','Адаптив'],
+      stages:[
+        {t:'0–10 мин',h:'Recap + петля',d:'«Доводим до товарного вида».'},
+        {t:'10–55 мин',h:'Экспорт и публикация',d:'PDF-выгрузка и отдельная страница-портфолио по ссылке.'},
+        {t:'55–75 мин',h:'Адаптив и полировка',d:'Корректный вид на телефоне и компьютере.'},
+        {t:'75–90 мин',h:'Проверка + крючок',d:'Демонстрация результата. Крючок к лендингам.'}
+      ],
+      prompts:[
+        {who:'student',ctx:'Antigravity',label:'Экспорт и ссылка',text:'Добавь экспорт готового резюме в PDF и возможность опубликовать его как отдельную страницу-портфолио по ссылке.'}
+      ],
+      hook:'У тебя уже два продукта на продажу. Дальше — то, что просит почти каждый бизнес: сайт, который сам собирает клиентов.',
+      portfolio:'AI-конструктор резюме и портфолио'
+    },
+    { n:'2.8', title:'Лендинг для бизнеса с AI-квизом и чатом',
+      type:'Проект · 1 урок · Финал блока',
+      isNew:'Соединение маркетинга и ИИ — лид-генерация. Самый частый заказ от локального бизнеса.',
+      short:'Продающий лендинг со встроенным ИИ-помощником и квизом для сбора заявок. Финал блока 2 и закрепление идентичности «я беру заказы».',
+      tools:['Lovable / v0','Встроенный AI-чат','Формы заявок'],
+      stages:[
+        {t:'0–10 мин',h:'Recap месяца + петля',d:'«Сайт за день, который приносит клиентов».'},
+        {t:'10–25 мин',h:'PRD лендинга',d:'Структура продающего сайта и роль ИИ-помощника.'},
+        {t:'25–75 мин',h:'Сборка',d:'Лендинг + встроенный ИИ-чат/квиз, который подводит к заявке.'},
+        {t:'75–85 мин',h:'Куда сохраняются заявки',d:'Сбор контактов, чтобы клиент мог с ними работать.'},
+        {t:'85–90 мин',h:'Крючок к месяцу 3',d:'Заявки есть — но где база клиентов и оплата?'}
+      ],
+      prompts:[
+        {who:'student',ctx:'Chat',label:'Запрос PRD',text:'Я хочу создать продающий лендинг для бизнеса со встроенным ИИ для сбора заявок.\nПервый экран с оффером, блок преимуществ, отзывы, частые вопросы, форма заявки.\nУмный ИИ-помощник отвечает на вопросы о услуге и мягко подводит к заявке; можно в формате квиза.\nВсе заявки и контакты сохраняются. Сайт быстрый, красивый, адаптивный.\nсоздай для меня PRD'},
+        {who:'student',ctx:'Lovable / v0',label:'Сборка лендинга',text:'Собери лендинг по этому SPEC со встроенным ИИ-помощником, который отвечает на вопросы посетителя и собирает контакты для заявки.'}
+      ],
+      hook:'Лендинг собирает заявки. Но клиент сразу спросит: где база этих клиентов? где онлайн-оплата? Со следующего месяца строим серьёзные приложения, за которые платят по-настоящему. Ты уже на двух третях пути к профессии.',
+      portfolio:'Лендинг для бизнеса с AI'
+    }
+  ]
+},
+{
+  id:3, cls:'m3', month:'Месяц 3',
+  title:'Коммерческие приложения: база данных, оплата, подписки',
+  goal:'Серьёзные приложения, за которые платят: база данных, авторизация, онлайн-оплата и подписки.',
+  identity:'«Я делаю продукты, за которые платят»',
+  lessons:[
+    { n:'3.1', title:'AI-система онлайн-записи. Часть 1',
+      type:'Проект',
+      isNew:'Первая работа с реальной структурой данных и расписанием/слотами — логики такого уровня в простых проектах не было.',
+      short:'Старт системы онлайн-записи для сферы услуг (салон/клиника): база данных, услуги, мастера, свободные слоты и защита от двойной записи.',
+      tools:['Next.js','Node.js','База данных'],
+      stages:[
+        {t:'0–10 мин',h:'Recap месяца 2 + петля',d:'«Строим то, за что платят бизнесы услуг».'},
+        {t:'10–25 мин',h:'PRD системы записи',d:'Услуги, мастера, слоты, роли клиента и владельца.'},
+        {t:'25–80 мин',h:'Данные и бронирование',d:'Структура БД, выбор услуги/мастера/времени, занятые слоты становятся недоступными.'},
+        {t:'80–90 мин',h:'Крючок',d:'Запись работает — но о ней никто не узнаёт.'}
+      ],
+      prompts:[
+        {who:'student',ctx:'Chat',label:'Запрос PRD',text:'Я хочу создать систему онлайн-записи клиентов для сферы услуг (например салон красоты или клиника).\nКлиент выбирает услугу, мастера, видит свободные дни и время и записывается. Занятые слоты становятся недоступными.\nУ владельца есть админ-панель с календарём записей и управлением услугами и мастерами.\nЕсть ИИ-ассистент, который помогает клиенту подобрать услугу и время.\nСтек: фронтенд на Next.js, бэкенд на Node.js, база данных.\nсоздай для меня PRD'},
+        {who:'student',ctx:'Gemini CLI / OpenCode',label:'Сборка ядра',text:'Составь SPEC по этому PRD и собери ядро системы: база данных услуг и мастеров, выбор свободного слота и бронирование с защитой от двойной записи.'}
+      ],
+      hook:'Слоты бронируются. Но клиент и владелец пока не узнают о новой записи. На следующем уроке подключим уведомления и умного ассистента.'
+    },
+    { n:'3.2', title:'AI-система онлайн-записи. Часть 2',
+      type:'Проект',
+      isNew:'Уведомления и админ-панель — то, за что бизнес доплачивает. Интеграция ИИ-ассистента в реальный рабочий процесс.',
+      short:'Завершение: уведомления о записи (Telegram/email), админ-панель с календарём и ИИ-ассистент, помогающий клиенту записаться.',
+      tools:['Telegram / Email уведомления','Админ-панель','ИИ-ассистент'],
+      stages:[
+        {t:'0–10 мин',h:'Recap + петля',d:'«Доводим до продукта, который можно продать салону».'},
+        {t:'10–45 мин',h:'Уведомления',d:'Сообщение владельцу в Telegram и клиенту на email при новой записи.'},
+        {t:'45–75 мин',h:'Админ-панель + ассистент',d:'Календарь записей, управление; ИИ-ассистент подбора услуги и времени.'},
+        {t:'75–90 мин',h:'Проверка + крючок',d:'Полный цикл записи. Крючок к интернет-магазину.'}
+      ],
+      prompts:[
+        {who:'student',ctx:'OpenCode',label:'Уведомления и админка',text:'Добавь уведомления о новой записи: владельцу в Telegram, клиенту на email. Сделай админ-панель с календарём записей и управлением услугами и мастерами.'}
+      ],
+      hook:'Готовый продукт для сферы услуг. Дальше — то, что приносит деньги напрямую: интернет-магазин с реальной онлайн-оплатой.',
+      portfolio:'AI-система онлайн-записи'
+    },
+    { n:'3.3', title:'AI интернет-магазин с платежами. Часть 1',
+      type:'Проект',
+      isNew:'Корзина и каталог + ИИ генерирует продающие описания товаров — связка коммерции и ИИ.',
+      short:'Старт магазина: каталог с категориями, карточки товара, корзина. ИИ сам пишет продающие описания товаров.',
+      tools:['Next.js','Node.js','База данных','LLM'],
+      stages:[
+        {t:'0–10 мин',h:'Recap + петля',d:'«Самый ходовой заказ в СНГ — интернет-магазин».'},
+        {t:'10–25 мин',h:'PRD магазина',d:'Каталог, корзина, оформление заказа, роль ИИ.'},
+        {t:'25–80 мин',h:'Каталог и корзина',d:'Структура БД товаров, карточки, корзина, генерация описаний через ИИ.'},
+        {t:'80–90 мин',h:'Крючок',d:'Товары в корзине — но без оплаты это витрина.'}
+      ],
+      prompts:[
+        {who:'student',ctx:'Chat',label:'Запрос PRD',text:'Я хочу создать интернет-магазин с онлайн-оплатой и ИИ-функциями.\nКаталог товаров с категориями, карточка товара с фото и ценой, корзина и оформление заказа.\nОплата через Stripe и местные системы (Payme, Click, Multicard).\nИИ генерирует продающие описания товаров, умный поиск и рекомендации.\nАдмин-панель: товары и заказы.\nСтек: фронтенд на Next.js, бэкенд на Node.js, база данных.\nсоздай для меня PRD'},
+        {who:'student',ctx:'Antigravity',label:'Каталог и описания',text:'Собери каталог с категориями, карточками товара и корзиной. Добавь генерацию продающих описаний товаров через ИИ.'}
+      ],
+      hook:'Товары в корзине. Но без оплаты это витрина, а не магазин. На следующем уроке подключаем реальные деньги.'
+    },
+    { n:'3.4', title:'AI интернет-магазин с платежами. Часть 2',
+      type:'Проект · Босс',
+      flag:'БОСС',
+      isNew:'РЕАЛЬНЫЕ ДЕНЬГИ: подключение платёжных систем, включая местные (Payme/Click/Multicard). Самый ценный навык на рынке СНГ.',
+      short:'Завершение магазина: онлайн-оплата (Stripe + местные системы), оформление заказа, уведомления и админка. Платежи нельзя «собрать вслепую» — это босс-проект.',
+      tools:['Stripe','Payme / Click / Multicard','Вебхуки оплаты'],
+      stages:[
+        {t:'0–10 мин',h:'Recap + петля',d:'«Учимся принимать настоящие деньги — это умеют не все».'},
+        {t:'10–30 мин',h:'Как устроена онлайн-оплата',d:'Чекаут, подтверждение оплаты, вебхуки, безопасность ключей.'},
+        {t:'30–75 мин',h:'Подключение платежей',d:'Stripe для карт и местные системы. Заказ сохраняется после оплаты.'},
+        {t:'75–85 мин',h:'Уведомления и проверка',d:'Уведомление владельцу о заказе, тест полного цикла оплаты.'},
+        {t:'85–90 мин',h:'Крючок',d:'Принимаешь оплату — это уже бизнес. Дальше технологичный блок.'}
+      ],
+      prompts:[
+        {who:'student',ctx:'OpenCode',label:'Подключение оплаты',text:'Подключи онлайн-оплату: Stripe для банковских карт и местные системы (Payme, Click). После успешной оплаты заказ сохраняется, а владельцу приходит уведомление.'}
+      ],
+      hook:'Ты принимаешь оплату — это уже бизнес. Дальше — продукт, который отвечает за бизнес клиента его же документами. Технически самый интересный блок месяца.',
+      portfolio:'AI интернет-магазин с платежами'
+    },
+    { n:'3.5', title:'AI-консультант по базе знаний (RAG). Часть 1',
+      type:'Проект',
+      isNew:'Технология RAG: ИИ отвечает строго по данным бизнеса. «Магия», которую студент ещё не видел, — самый технологичный блок курса.',
+      short:'Старт RAG-консультанта: загрузка документов клиента (PDF/сайт), обработка и сборка базы знаний.',
+      tools:['Node.js','Векторная база','Эмбеддинги','LLM'],
+      stages:[
+        {t:'0–10 мин',h:'Recap + петля',d:'«Бот, который знает бизнес клиента наизусть».'},
+        {t:'10–30 мин',h:'Что такое RAG',d:'Почему обычный ИИ выдумывает, и как база знаний это исправляет. Простыми словами про эмбеддинги и векторную базу.'},
+        {t:'30–80 мин',h:'Загрузка и обработка',d:'Загрузка PDF/ссылки, разбор в базу знаний.'},
+        {t:'80–90 мин',h:'Крючок',d:'База собрана — дальше агент начнёт отвечать по ней.'}
+      ],
+      prompts:[
+        {who:'student',ctx:'Chat',label:'Запрос PRD',text:'Я хочу создать ИИ-консультанта, который отвечает на вопросы строго по данным конкретного бизнеса.\nЯ загружаю документы компании (прайсы, инструкции, FAQ) файлом PDF или ссылкой на сайт.\nПриложение складывает их в базу знаний, и консультант отвечает только на основе этой информации.\nЕсли ответа нет — честно говорит и предлагает связаться с человеком. Чат можно встроить на сайт.\nСтек: фронтенд на Next.js, бэкенд на Node.js, векторная база, подключение к LLM.\nсоздай для меня PRD'},
+        {who:'student',ctx:'OpenCode',label:'База знаний',text:'Сделай загрузку PDF-документов и их обработку в базу знаний: разбиение на части, эмбеддинги и сохранение в векторную базу.'}
+      ],
+      hook:'База знаний собрана. На следующем уроке агент начнёт отвечать только по ней — и честно говорить, когда чего-то не знает.'
+    },
+    { n:'3.6', title:'AI-консультант по базе знаний (RAG). Часть 2',
+      type:'Проект',
+      isNew:'Встраиваемый виджет и «честные» ответы только по данным — готовый продукт уровня, который умеют единицы.',
+      short:'Завершение: агент отвечает строго по документам, при отсутствии ответа предлагает связаться с человеком, оформляется как виджет для сайта клиента.',
+      tools:['RAG','Чат-виджет','Встраивание на сайт'],
+      stages:[
+        {t:'0–10 мин',h:'Recap + петля',d:'«Доводим до продукта за серьёзные деньги».'},
+        {t:'10–55 мин',h:'Ответы по базе',d:'Поиск по векторной базе, ответ строго по данным, честный отказ при отсутствии информации.'},
+        {t:'55–80 мин',h:'Виджет на сайт',d:'Оформление как встраиваемого чат-виджета, обновление базы знаний.'},
+        {t:'80–90 мин',h:'Проверка + крючок',d:'Тест точности ответов. Крючок к SaaS.'}
+      ],
+      prompts:[
+        {who:'student',ctx:'OpenCode',label:'Ответы и виджет',text:'Сделай, чтобы агент отвечал только на основе загруженных документов, а при отсутствии ответа предлагал связаться с человеком. Оформи как чат-виджет для встраивания на сайт.'}
+      ],
+      hook:'Это уже продукт за серьёзные деньги. Финал месяца — собственный сервис по подписке, который приносит доход каждый месяц.',
+      portfolio:'AI-консультант по базе знаний (RAG)'
+    },
+    { n:'3.7', title:'Платный AI-SaaS с подпиской. Часть 1',
+      type:'Проект',
+      isNew:'Авторизация и тарифы (free/pro) — переход от «проекта» к «бизнесу с регулярным доходом».',
+      short:'Старт SaaS: регистрация и вход, личный кабинет, разные тарифы. В основе — один из ИИ-инструментов, собранных ранее.',
+      tools:['Next.js','Node.js','Авторизация','База данных'],
+      stages:[
+        {t:'0–10 мин',h:'Recap + петля',d:'«Свой продукт, который зарабатывает сам».'},
+        {t:'10–25 мин',h:'PRD SaaS',d:'Регистрация, личный кабинет, тарифы free/pro, лимиты.'},
+        {t:'25–80 мин',h:'Авторизация и тарифы',d:'Вход, личный кабинет, модель тарифов и ограничение функций.'},
+        {t:'80–90 мин',h:'Крючок',d:'Тарифы есть — дальше включаем оплату и лимиты.'}
+      ],
+      prompts:[
+        {who:'student',ctx:'Chat',label:'Запрос PRD',text:'Я хочу создать платный онлайн-сервис (SaaS) с регистрацией и подпиской, в основе которого ИИ-инструмент.\nПользователь регистрируется, входит в личный кабинет и пользуется ИИ-инструментом.\nТарифы: бесплатный с лимитом и платный pro. При превышении лимита — предложение перейти на платный.\nОплата подписки через Stripe и местные системы (Payme, Click). В кабинете видно тариф, остаток лимита и историю.\nСтек: фронтенд на Next.js, бэкенд на Node.js, база данных, авторизация.\nсоздай для меня PRD'},
+        {who:'student',ctx:'Antigravity',label:'Auth и тарифы',text:'Собери авторизацию, личный кабинет и систему тарифов free/pro с ограничением функций по тарифу.'}
+      ],
+      hook:'Пользователи регистрируются и видят тарифы. На следующем уроке включим оплату подписки и лимиты — и продукт начнёт зарабатывать сам.'
+    },
+    { n:'3.8', title:'Платный AI-SaaS с подпиской. Часть 2',
+      type:'Проект · Финал блока',
+      isNew:'Регулярные платежи (подписка) и квоты использования — модель пассивного дохода. Кульминация коммерческого блока.',
+      short:'Завершение SaaS: подписки (Stripe + местные), лимиты использования, личный кабинет с тарифом и историей. Финал блока 3.',
+      tools:['Stripe Subscriptions','Payme / Click','Квоты и лимиты'],
+      stages:[
+        {t:'0–10 мин',h:'Recap месяца + петля',d:'«Запускаем продукт с регулярным доходом».'},
+        {t:'10–50 мин',h:'Подписки',d:'Оплата подписки через Stripe и местные системы, управление тарифом.'},
+        {t:'50–75 мин',h:'Лимиты и кабинет',d:'Квоты использования по тарифу, остаток лимита и история в кабинете.'},
+        {t:'75–90 мин',h:'Проверка + крючок',d:'Тест полного цикла подписки. Сильный крючок к месяцу 4.'}
+      ],
+      prompts:[
+        {who:'student',ctx:'OpenCode',label:'Подписка и лимиты',text:'Подключи подписку: бесплатный тариф с лимитом использований в месяц и платный pro. Оплата через Stripe и местные системы. В личном кабинете показывай текущий тариф, остаток лимита и историю использования.'}
+      ],
+      hook:'У тебя собственный продукт с подпиской. Но он умеет только то, что ты в него заложил. А что, если агент сам ходит в чужие сервисы — таблицы, CRM, Telegram — и делает работу за человека? Это умеют единицы, и этому учит финальный месяц на самом мощном ИИ — Claude.',
+      portfolio:'Платный AI-SaaS с подпиской'
+    }
+  ]
+},
+{
+  id:4, cls:'m4', month:'Месяц 4',
+  title:'Claude Code, MCP и выпускной проект',
+  goal:'Апгрейд на топовый ИИ-агент и большой капстоун-проект под реальный бизнес.',
+  identity:'«Я строю агентные системы — то, что умеют единицы»',
+  lessons:[
+    { n:'4.1', title:'Claude Code: апгрейд на топовый ИИ-агент',
+      type:'Инструменты',
+      isNew:'Скачок мощности относительно всех прежних инструментов. Профессиональный агентный воркфлоу и работа с большой кодовой базой.',
+      short:'Переход на Claude Code — самый мощный агент. Установка, подписка, файл CLAUDE.md, агентный воркфлоу, отличия от Gemini CLI / OpenCode / Antigravity.',
+      tools:['Claude Code','CLAUDE.md','Агентный воркфлоу'],
+      note:'К этому моменту оформляется подписка Claude — её покупаем для студентов или они оформляют сами. Уточните формат с группой заранее.',
+      stages:[
+        {t:'0–10 мин',h:'Recap месяца 3 + петля',d:'«Берём в руки самый мощный инструмент курса».'},
+        {t:'10–30 мин',h:'Установка и настройка',d:'Подписка, установка Claude Code, первый запуск.'},
+        {t:'30–55 мин',h:'CLAUDE.md и воркфлоу',d:'Зачем нужен файл правил проекта, как агент работает с большой кодовой базой.'},
+        {t:'55–80 мин',h:'Сравнение инструментов',d:'Чем Claude Code сильнее прежних агентов — на практике.'},
+        {t:'80–90 мин',h:'Крючок',d:'Дальше соберём целое приложение за один урок.'}
+      ],
+      prompts:[
+        {who:'student',ctx:'Claude Code',label:'Файл правил проекта',text:'Проанализируй мой проект и создай файл CLAUDE.md с описанием структуры, технологического стека и правил разработки для агента.'}
+      ],
+      hook:'Ты почувствовал мощность. На следующем уроке соберём целое приложение за один урок — то, на что раньше ушёл бы месяц.'
+    },
+    { n:'4.2', title:'Полноценное мини-приложение за один урок на Claude Code',
+      type:'Проект · 1 урок',
+      isNew:'Сложный продукт (распознавание и синтез речи) собирается за один урок — наглядное доказательство рывка мощности.',
+      short:'Демонстрация силы Claude Code: за одну сессию — голосовой ИИ-ассистент в браузере целиком.',
+      tools:['Claude Code','Next.js','Node.js','Голосовые API'],
+      stages:[
+        {t:'0–10 мин',h:'Recap + петля',d:'«Сегодня соберём целое приложение за урок».'},
+        {t:'10–20 мин',h:'PRD голосового ассистента',d:'Что умеет: слушать, понимать, отвечать голосом.'},
+        {t:'20–80 мин',h:'Сборка end-to-end',d:'Распознавание речи, обработка через LLM, синтез ответа голосом, история диалога.'},
+        {t:'80–90 мин',h:'Проверка + крючок',d:'Тест ассистента. Крючок к подключению реальных сервисов.'}
+      ],
+      prompts:[
+        {who:'student',ctx:'Chat',label:'Запрос PRD',text:'Я хочу создать голосового ИИ-ассистента в браузере.\nЯ нажимаю кнопку и говорю, приложение распознаёт речь, ИИ обрабатывает запрос и отвечает текстом и голосом вслух.\nАссистента можно настроить под задачу (например помощник для бизнеса). История диалога сохраняется.\nСтек: фронтенд на Next.js, бэкенд на Node.js, подключение к LLM и голосовым API.\nсоздай для меня PRD'},
+        {who:'student',ctx:'Claude Code',label:'Сборка приложения',text:'Составь SPEC по этому PRD и собери приложение целиком: распознавание речи, ответ через LLM, озвучка ответа голосом, история диалога, современный адаптивный интерфейс.'}
+      ],
+      hook:'Один урок — целое приложение. Дальше — суперсила Claude: подключение агента к реальным сервисам клиента.',
+      portfolio:'Голосовой ИИ-ассистент'
+    },
+    { n:'4.3', title:'MCP. Подключаем Claude к сервисам',
+      type:'Инструменты',
+      isNew:'Агент впервые работает с РЕАЛЬНЫМИ данными клиента — таблицами, файлами, репозиториями. Выход за пределы чата.',
+      short:'Знакомство с MCP: подключение Claude к Google Sheets, Drive и GitHub через готовые серверы. Сразу как продаваемая интеграция.',
+      tools:['Claude Code','MCP','Google Sheets / Drive / GitHub'],
+      stages:[
+        {t:'0–10 мин',h:'Recap + петля',d:'«Агент начинает работать с данными бизнеса».'},
+        {t:'10–35 мин',h:'Что такое MCP',d:'Как протокол соединяет ИИ с внешними сервисами. Подключение готовых MCP-серверов.'},
+        {t:'35–80 мин',h:'Практика',d:'Агент читает базу клиентов из Google Sheets и добавляет новые строки по запросу; доступ к Drive и GitHub.'},
+        {t:'80–90 мин',h:'Крючок',d:'Дальше напишем СВОИ инструменты для агента.'}
+      ],
+      prompts:[
+        {who:'student',ctx:'Claude Code + MCP',label:'Подключение Sheets',text:'Подключи через MCP доступ к Google Sheets. Научи агента читать базу клиентов из таблицы и добавлять новые строки по моему запросу в диалоге.'}
+      ],
+      hook:'Агент читает чужие сервисы. На следующем уроке научимся писать СВОИ инструменты для него — то, что на рынке умеют единицы.'
+    },
+    { n:'4.4', title:'Свой MCP-сервер на Node.js. Субагенты',
+      type:'Проект',
+      isNew:'Создание собственных инструментов для ИИ и оркестрация нескольких агентов. Топ-уровень и отдельная платная услуга.',
+      short:'Пишем собственный MCP-сервер: свои инструменты для агента (доступ к API и базе клиента) и настройка субагентов под разные задачи.',
+      tools:['Node.js','Свой MCP-сервер','Субагенты'],
+      stages:[
+        {t:'0–10 мин',h:'Recap + петля',d:'«Делаем агента способным на то, чего нет у других».'},
+        {t:'10–30 мин',h:'Как устроен MCP-сервер',d:'Что такое собственные инструменты для агента и зачем они бизнесу.'},
+        {t:'30–70 мин',h:'Пишем сервер',d:'Инструменты доступа к базе/API клиента, агент вызывает их сам в диалоге.'},
+        {t:'70–85 мин',h:'Субагенты',d:'Распределение задач между несколькими агентами.'},
+        {t:'85–90 мин',h:'Крючок',d:'Пора собрать из этого выпускной проект.'}
+      ],
+      prompts:[
+        {who:'student',ctx:'Claude Code + Node.js',label:'Свой MCP-сервер',text:'Создай собственный MCP-сервер на Node.js с инструментами: получить, добавить и обновить записи в базе клиента. Агент должен сам вызывать эти инструменты в процессе диалога.'},
+        {who:'student',ctx:'Claude Code',label:'Субагенты',text:'Настрой субагентов: одного для общения с клиентом, другого для работы с данными. Распредели задачи между ними.'}
+      ],
+      hook:'Ты умеешь то, что мало кто умеет. Пора собрать из этого выпускной проект под реальный бизнес — твою главную витрину для клиентов.'
+    },
+    { n:'4.5', title:'Выпускной проект. Ниша, PRD + SPEC, архитектура. Часть 1',
+      type:'Капстоун',
+      isNew:'Студент впервые самостоятельно (с поддержкой Claude) проектирует крупную систему с нуля — экзамен на самостоятельность.',
+      short:'Старт капстоуна: выбор ниши, проектирование агентной системы, PRD и SPEC, архитектура и каркас проекта.',
+      tools:['Claude Code','PRD / SPEC','Архитектура'],
+      stages:[
+        {t:'0–10 мин',h:'Recap месяца + постановка',d:'Объясняем формат выпускного проекта и критерии оценки.'},
+        {t:'10–30 мин',h:'Выбор ниши',d:'Студент выбирает вертикаль: недвижимость, клиника, магазин, ресторан, автосервис.'},
+        {t:'30–60 мин',h:'PRD и SPEC',d:'Проектируем систему под выбранную нишу.'},
+        {t:'60–85 мин',h:'Архитектура и каркас',d:'Структура проекта, стек, заготовка под агентов и интеграции.'},
+        {t:'85–90 мин',h:'Крючок',d:'Дальше — мозг системы: бэкенд, агенты и MCP.'}
+      ],
+      prompts:[
+        {who:'student',ctx:'Claude Code',label:'PRD капстоуна (вставить нишу)',text:'Я хочу создать комплексную ИИ-агентную систему для ниши: [ВСТАВЬ НИШУ — недвижимость / клиника / интернет-магазин / ресторан / автосервис].\nИИ-агент общается с клиентами бизнеса и решает их типовые запросы (консультация, подбор, запись, заказ).\nАгент подключён к реальным сервисам через MCP: база данных, Google Sheets, CRM, Telegram, email — и сам создаёт записи, оформляет заявки, отправляет уведомления.\nАдмин-панель для владельца, оплата (Stripe + Payme/Click), несколько субагентов.\nСтек: фронтенд на Next.js, бэкенд на Node.js, база данных, MCP-серверы, подключение к Claude.\nсоздай для меня PRD'}
+      ],
+      hook:'Архитектура готова. Дальше — самое мясо: бэкенд, агенты и подключение к реальным сервисам.'
+    },
+    { n:'4.6', title:'Выпускной проект. Backend, агенты, MCP-интеграции. Часть 2',
+      type:'Капстоун',
+      isNew:'Сборка полноценной агентной системы с интеграциями — кульминация всех навыков курса в одном проекте.',
+      short:'Серверная часть капстоуна: агенты + MCP-интеграции (Sheets / CRM / Telegram / email), реальные действия агента.',
+      tools:['Node.js','Агенты','MCP'],
+      stages:[
+        {t:'0–10 мин',h:'Recap + план',d:'Что собираем сегодня в системе.'},
+        {t:'10–80 мин',h:'Бэкенд и агенты',d:'Логика агента, подключение через MCP к сервисам, реальные действия: записи, заявки, уведомления.'},
+        {t:'80–90 мин',h:'Проверка + крючок',d:'Тест действий агента. Крючок к витрине проекта.'}
+      ],
+      prompts:[
+        {who:'student',ctx:'Claude Code',label:'Бэкенд системы',text:'Собери бэкенд системы: агент общается с клиентом, через MCP подключён к базе данных, таблицам и Telegram, и сам создаёт записи и отправляет уведомления.'}
+      ],
+      hook:'Мозг системы работает. На следующем уроке соберём витрину — дашборд, оплату и доведём проект до товарного вида.'
+    },
+    { n:'4.7', title:'Выпускной проект. Frontend-дашборд, платежи, полировка. Часть 3',
+      type:'Капстоун',
+      isNew:'Сборка всего в единый товарный продукт + монетизация — превращение проекта в то, что реально продать.',
+      short:'Лицо капстоуна: админ-дашборд на Next.js, подключение платежей и финальная полировка до продаваемого вида.',
+      tools:['Next.js','Stripe / Payme','UI-полировка'],
+      stages:[
+        {t:'0–10 мин',h:'Recap + план',d:'Что доводим до товарного вида.'},
+        {t:'10–55 мин',h:'Админ-дашборд',d:'Диалоги, заявки, аналитика, управление агентом.'},
+        {t:'55–80 мин',h:'Платежи и полировка',d:'Подключение оплаты и доведение интерфейса до чистого вида.'},
+        {t:'80–90 мин',h:'Проверка + крючок',d:'Финальная сборка. Крючок к запуску и продаже.'}
+      ],
+      prompts:[
+        {who:'student',ctx:'Claude Code',label:'Дашборд и оплата',text:'Собери админ-дашборд: диалоги, заявки, аналитика, управление агентом. Подключи оплату (Stripe и местные системы) и доведи интерфейс до чистого товарного вида.'}
+      ],
+      hook:'Продукт почти готов. Финал курса — выкатить его в мир, посчитать себестоимость и научиться продавать.'
+    },
+    { n:'4.8', title:'Деплой, упаковка, продажа + защита + итоговое тестирование',
+      type:'Финал курса',
+      isNew:'Бизнес-навыки: деплой в продакшн, экономика проекта, презентация и продажа клиенту. То, что превращает разработчика в зарабатывающего специалиста.',
+      short:'Финал курса: прод-деплой, расчёт себестоимости токенов и инфраструктуры, как презентовать и продать продукт, демо-день и защита выпускных работ, итоговое тестирование.',
+      tools:['Деплой (Vercel / VPS)','Экономика проекта','Презентация и продажа'],
+      stages:[
+        {t:'0–15 мин',h:'Деплой в продакшн',d:'Выкатка фронта и бэка, переменные окружения, защита ключей, домен.'},
+        {t:'15–30 мин',h:'Экономика проекта',d:'Себестоимость токенов и инфраструктуры, как назначить цену клиенту, модель «настройка + абонентка».'},
+        {t:'30–45 мин',h:'Как продать клиенту',d:'Презентация продукта, упаковка кейса для портфолио.'},
+        {t:'45–85 мин',h:'Демо-день и защита',d:'Каждый презентует и защищает выпускной проект.'},
+        {t:'85–90 мин',h:'Итоговое тестирование + финал',d:'Проверка знаний и торжественный итог курса.'}
+      ],
+      prompts:[
+        {who:'student',ctx:'Claude Code',label:'Чек-лист запуска',text:'Помоги подготовить деплой проекта в продакшн: переменные окружения, защита ключей, домен. Составь чек-лист запуска.'},
+        {who:'teacher',ctx:'Chat',label:'Оценка защиты',text:'Сгенерируй критерии оценки выпускного проекта и список вопросов для защиты студентов.'}
+      ],
+      hook:'Студент прошёл путь от «собрал Змейку» до агентной системы, которую можно продать бизнесу. У него есть портфолио, навык и продукт. Дальше — его первые клиенты.',
+      portfolio:'Выпускной капстоун-проект'
+    }
+  ]
+}
+];
+
+/* ====================== РЕНДЕР ====================== */
+const main=document.getElementById('main');
+const nav=document.getElementById('nav');
+
+function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+
+/* sidebar */
+function buildNav(){
+  let h='';
+  MODULES.forEach(m=>{
+    h+=`<div class="modgroup ${m.cls}">
+      <div class="modhead"><span class="moddot"></span><span class="mt">Модуль ${m.id}</span><span class="mm">${m.month}</span></div>`;
+    m.lessons.forEach(l=>{
+      const dataStr=(l.n+' '+l.title+' '+l.tools.join(' ')+' '+l.short).toLowerCase();
+      h+=`<button class="lessrow" data-id="${l.n}" data-search="${esc(dataStr)}" onclick="showLesson('${l.n}')">
+        <span class="lnum">${l.n}</span>
+        <span class="lt">${esc(l.title)}<small>${esc(l.type)}</small></span>
+      </button>`;
+    });
+    h+=`</div>`;
+  });
+  nav.innerHTML=h;
+}
+
+function findLesson(id){
+  for(const m of MODULES){const l=m.lessons.find(x=>x.n===id); if(l) return {m,l};}
+  return null;
+}
+
+function setActive(id){
+  document.querySelectorAll('.lessrow').forEach(b=>b.classList.toggle('active',b.dataset.id===id));
+  document.getElementById('introBtn').classList.toggle('active',id==='intro');
+}
+
+function showLesson(id){
+  const f=findLesson(id); if(!f) return;
+  const {m,l}=f;
+  setActive(id);
+  let h=`<div class="wrap ${m.cls}">
+    <div class="crumb"><span class="moddot"></span>Модуль ${m.id} · ${esc(m.month)} · Урок ${l.n}</div>
+    <h2 class="ltitle">${esc(l.title)}</h2>
+    <div class="meta">
+      <span class="chip type">${esc(l.type)}</span>
+      ${l.flag?`<span class="chip flag">⚑ ${esc(l.flag)}</span>`:''}
+      ${l.portfolio?`<span class="chip">＋ В портфолио</span>`:''}
+    </div>`;
+
+  if(l.wall){
+    h+=`<div class="wallbanner" style="margin-top:18px">
+      <svg class="wi" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
+      <p><b>Заметка преподавателю.</b> ${esc(l.wall)}</p></div>`;
+  }
+  if(l.note){
+    h+=`<div class="wallbanner" style="margin-top:18px">
+      <svg class="wi" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01"/><path d="M11 12h1v4h1"/></svg>
+      <p><b>Заметка преподавателю.</b> ${esc(l.note)}</p></div>`;
+  }
+
+  h+=`<div class="sect"><h3><span class="bar"></span>Краткое описание</h3>
+    <p class="lead muted">${esc(l.short)}</p></div>`;
+
+  h+=`<div class="sect"><div class="callout"><div class="cl">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="12 2 15 9 22 9 16 14 18 22 12 17 6 22 8 14 2 9 9 9 12 2"/></svg>
+    Что нового на этом уроке</div><p>${esc(l.isNew)}</p></div></div>`;
+
+  h+=`<div class="sect"><h3><span class="bar"></span>Инструменты урока</h3>
+    <div class="tools">${l.tools.map(t=>`<span class="tool">${esc(t)}</span>`).join('')}</div></div>`;
+
+  h+=`<div class="sect"><h3><span class="bar"></span>Этапы урока · 90 минут</h3><div class="stages">`;
+  l.stages.forEach(s=>{
+    h+=`<div class="stage"><div class="stime"><span>${esc(s.t)}</span></div>
+      <div class="sbody"><h4>${esc(s.h)}</h4><p>${esc(s.d)}</p></div></div>`;
+  });
+  h+=`</div></div>`;
+
+  if(l.prompts && l.prompts.length){
+    h+=`<div class="sect"><h3><span class="bar"></span>Промпты урока</h3>`;
+    l.prompts.forEach(p=>{
+      const cls=p.who==='teacher'?'teacher':'student';
+      const who=p.who==='teacher'?'Преподаватель':'Студент';
+      h+=`<div class="prompt"><div class="prompt-head">
+        <span class="who ${cls}">${who}</span>
+        ${p.ctx?`<span class="pctx">${esc(p.ctx)}</span>`:''}
+        ${p.label?`<span class="plabel">— ${esc(p.label)}</span>`:''}
+        <button class="copy" type="button"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Копировать</button>
+      </div><pre>${esc(p.text)}</pre></div>`;
+    });
+    h+=`</div>`;
+  }
+
+  h+=`<div class="sect"><div class="hook">
+    <div class="hi"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
+    <div><div class="hl">Крючок на следующий урок</div><p>${esc(l.hook)}</p></div></div></div>`;
+
+  if(l.portfolio){
+    h+=`<div class="sect"><span class="portfolio">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
+      В портфолио: ${esc(l.portfolio)}</span></div>`;
+  }
+
+  h+=`</div>`;
+  main.innerHTML=h;
+  main.scrollTop=0;
+  closeMobileNav();
+}
+
+function showIntro(){
+  setActive('intro');
+  let cards='';
+  MODULES.forEach(m=>{
+    cards+=`<div class="card ${m.cls}">
+      <div class="ct"><span class="moddot"></span>Модуль ${m.id} · ${esc(m.month)}</div>
+      <p><b style="color:var(--text)">${esc(m.title)}.</b> ${esc(m.goal)}</p>
+      <div class="ident" style="color:var(--accent)">${esc(m.identity)}</div></div>`;
+  });
+
+  const tpl=[
+    {t:'0–10 мин',h:'Разогрев и крючок',d:'Короткий recap прошлого урока, ответ на открытую «петлю» и показ цели сегодняшнего занятия.'},
+    {t:'10–25 мин',h:'Новое: теория или инструмент',d:'Объясняем и показываем новую концепцию или инструмент. Минимум теории — сразу к делу.'},
+    {t:'25–75 мин',h:'Практика: совместный билд',d:'Сердце урока. Собираем проект через промпты, шаг за шагом, подтверждая прогресс.'},
+    {t:'75–85 мин',h:'Закрепление и ошибки',d:'Проверяем результат, разбираем типовые ошибки, фиксируем, что уходит в портфолио.'},
+    {t:'85–90 мин',h:'Крючок на следующий урок',d:'Открываем «петлю»: ставим вопрос, на который ответит следующее занятие.'}
+  ];
+  let tplH='';
+  tpl.forEach(s=>{tplH+=`<div class="row"><div class="rt">${s.t}</div><div><h4>${s.h}</h4><p>${s.d}</p></div></div>`});
+
+  main.innerHTML=`<div class="wrap m2">
+    <div class="introhero">
+      <div class="crumb"><span class="moddot" style="background:var(--violet);box-shadow:0 0 10px var(--violet)"></span>Методичка преподавателя</div>
+      <h2>AI-Developer · шпаргалка для преподавателей</h2>
+      <p class="sub">Полный разбор всех 32 уроков курса: краткое и подробное описание, поэтапный тайминг на 90 минут, все промпты для студента и преподавателя, изучаемые инструменты и крючок удержания на каждый урок. Слева — навигация по модулям; в поиске вверху можно быстро найти урок или инструмент.</p>
+    </div>
+
+    <div class="sect"><h3 style="--accent:var(--violet)"><span class="bar"></span>Четыре модуля · лестница роста</h3>
+      <div class="cards">${cards}</div></div>
+
+    <div class="sect"><h3 style="--accent:var(--cyan)"><span class="bar"></span>Как проводится любой урок · шаблон 90 минут</h3>
+      <div class="mtpl">${tplH}</div></div>
+
+    <div class="sect"><h3 style="--accent:var(--violet)"><span class="bar"></span>Философия удержания · почему студент не уходит</h3>
+      <div class="philo">
+        <p>Студенты уходят не когда чувствуют, что <span class="acc">могут</span>, а когда чувствуют, что <span class="acc">закончили</span>. Восторг от первого собранного приложения — это топливо, а не угроза. Угроза — ощущение завершённой истории. Поэтому каждый урок обязан делать минимум одно из трёх:</p>
+        <p>① <b>Открыть петлю</b> — закончиться вопросом, на который отвечает следующий урок. ② <b>Поднять ставку или идентичность</b> — студент становится кем-то новым (см. лестницу модулей). ③ <b>Видимо продвинуть</b> по лестнице портфолио и денег.</p>
+        <p>Главный честный аргумент курса: <span class="acc">ИИ сделал лёгким создание, но не сделал лёгким зарабатывание.</span> Между «собрал Змейку» и «мне заплатил клиент» лежат деплой, реальные платежи, авторизация, поддержка и умение продать. Первый блок даёт дофамин, блоки 2–4 дают деньги.</p>
+        <p>Особый урок — <b style="color:var(--wall)">1.8 «Стена»</b>: первый блок должен быть ярким, но <b>незавершённым</b>. В конце честно упритесь с группой в потолок текущих умений и сразу разверните карту пути на месяцы 2–4. Не гасите восторг — добавляйте открытость.</p>
+      </div></div>
+
+    <div class="sect"><h3 style="--accent:var(--emerald)"><span class="bar"></span>Условные обозначения</h3>
+      <div class="legend">
+        <div class="li"><span class="chip type" style="--accent:var(--cyan)">Тип</span><span><b>Тип урока</b> — вводный, проект, инструменты, капстоун, финал.</span></div>
+        <div class="li"><span class="chip flag">⚑ СТЕНА / БОСС</span><span><b>Особые уроки.</b> «Стена» (1.8) — точка удержания в конце первого блока. «Босс» (3.4) — сложный проект, который нельзя «собрать вслепую», сам по себе причина не уходить.</span></div>
+        <div class="li"><span class="portfolio" style="padding:4px 10px;font-size:12px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>В портфолио</span><span><b>Завершённый проект</b>, который добавляется в портфолио студента (всего ~14 за курс).</span></div>
+        <div class="li"><span class="who student" style="position:static">Студент</span><span class="who teacher" style="position:static">Преподаватель</span><span><b>Промпты</b> помечены ролью: кто и где их вводит. Кнопка «Копировать» — рядом с каждым.</span></div>
+      </div></div>
+
+    <div class="sect"><div class="wallbanner">
+      <svg class="wi" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01"/><path d="M11 12h1v4h1"/></svg>
+      <p><b>Совет по работе с промптами.</b> После того как ИИ выдаёт PRD, добивайте вторым сообщением: «теперь на основе этого PRD составь подробный SPEC для разработки». Так связка PRD → SPEC получается в два чистых шага. Команды установки и версии инструментов сверяйте с актуальной документацией перед уроком.</p></div></div>
+  </div>`;
+  main.scrollTop=0;
+  closeMobileNav();
+}
+
+/* copy */
+document.addEventListener('click',e=>{
+  const btn=e.target.closest('.copy');
+  if(!btn) return;
+  const pre=btn.closest('.prompt').querySelector('pre');
+  const txt=pre.innerText;
+  const done=()=>{const o=btn.innerHTML;btn.classList.add('done');btn.innerHTML='✓ Скопировано';setTimeout(()=>{btn.classList.remove('done');btn.innerHTML=o;},1500);};
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(done).catch(()=>fallback(txt,done));}
+  else fallback(txt,done);
+});
+function fallback(txt,cb){const ta=document.createElement('textarea');ta.value=txt;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');cb();}catch(e){}document.body.removeChild(ta);}
+
+/* search */
+document.getElementById('search').addEventListener('input',e=>{
+  const q=e.target.value.trim().toLowerCase();
+  document.querySelectorAll('.lessrow').forEach(b=>{
+    b.classList.toggle('hidden', q && !b.dataset.search.includes(q));
+  });
+  document.querySelectorAll('.modgroup').forEach(g=>{
+    const any=[...g.querySelectorAll('.lessrow')].some(b=>!b.classList.contains('hidden'));
+    g.classList.toggle('hidden', q && !any);
+  });
+});
+
+/* theme */
+const themeBtn=document.getElementById('themeBtn');
+const themeIcon=document.getElementById('themeIcon');
+const sun='<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>';
+const moon='<path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/>';
+themeBtn.addEventListener('click',()=>{
+  const cur=document.documentElement.getAttribute('data-theme');
+  const next=cur==='dark'?'light':'dark';
+  document.documentElement.setAttribute('data-theme',next);
+  themeIcon.innerHTML=next==='dark'?moon:sun;
+});
+
+/* mobile nav */
+const aside=document.getElementById('aside');
+document.getElementById('menuBtn').addEventListener('click',()=>aside.classList.toggle('open'));
+function closeMobileNav(){if(window.innerWidth<=900)aside.classList.remove('open');}
+
+/* init */
+buildNav();
+showIntro();
+</script>
+</body>
+</html>
