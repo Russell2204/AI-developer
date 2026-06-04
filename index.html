@@ -14,6 +14,7 @@
   --text:#EAEDF5; --muted:#99A1B5; --muted2:#6C7488;
   --accent:#38D6E6; --cyan:#38D6E6; --violet:#A78BFA; --emerald:#34D399; --amber:#F5A623;
   --wall:#F5A623; --ok:#34D399;
+  --easy:#34D399; --med:#F5C451; --hard:#F1736A;
   --shadow:0 10px 30px rgba(0,0,0,.45);
   --radius:14px;
 }
@@ -209,6 +210,20 @@ h2.ltitle{font-family:'Unbounded';font-weight:700;font-size:30px;line-height:1.1
 .card .ct{font-family:'Unbounded';font-weight:600;font-size:13px;letter-spacing:.3px;display:flex;align-items:center;gap:9px}
 .card p{font-size:13.5px;color:var(--muted);margin-top:9px;line-height:1.5}
 .card .ident{font-size:13px;font-weight:700;margin-top:11px;padding-top:11px;border-top:1px solid var(--border)}
+/* homework */
+.lessrow.hwrow .lnum.hwn{display:grid;place-items:center}
+.hw-list{display:flex;flex-direction:column;gap:14px;margin-top:6px}
+.hw{position:relative;border:1px solid var(--border2);background:var(--panel);border-radius:var(--radius);padding:17px 18px 17px 21px;overflow:hidden}
+.hw:before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px}
+.hw.easy:before{background:var(--easy)} .hw.med:before{background:var(--med)} .hw.hard:before{background:var(--hard)}
+.hw-top{display:flex;align-items:center;gap:11px;flex-wrap:wrap;margin-bottom:9px}
+.hw-badge{font-size:11.5px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;padding:4px 10px;border-radius:7px;color:#0A0C12}
+.hw.easy .hw-badge{background:var(--easy)} .hw.med .hw-badge{background:var(--med)} .hw.hard .hw-badge{background:var(--hard)}
+.hw-basis{font-size:12px;font-weight:600;color:var(--muted2)}
+.hw-title{font-size:16px;font-weight:700;color:var(--text);margin-bottom:6px}
+.hw-desc{font-size:14.5px;color:var(--muted);line-height:1.55}
+.hw-deliver{margin-top:11px;font-size:13.5px;color:var(--text);background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:9px 12px;line-height:1.5}
+.hw-deliver span{font-weight:800;color:var(--accent)}
 .mtpl{counter-reset:step;display:flex;flex-direction:column;gap:11px}
 .mtpl .row{display:flex;gap:14px;align-items:flex-start;border:1px solid var(--border2);background:var(--panel);border-radius:12px;padding:13px 16px}
 .mtpl .rt{font-family:'JetBrains Mono';font-size:11.5px;font-weight:600;color:var(--cyan);flex:none;width:84px;border:1px solid color-mix(in srgb,var(--cyan) 30%,transparent);background:color-mix(in srgb,var(--cyan) 10%,transparent);border-radius:8px;padding:6px 4px;text-align:center}
@@ -291,6 +306,12 @@ const MODULES = [
   title:'Знакомство с ИИ-инструментами и первые приложения',
   goal:'Освоить инструменты, научиться ставить задачу через PRD/SPEC и собрать первые работающие приложения.',
   identity:'«Я умею собирать работающие приложения»',
+  homework:[
+    {level:'лёгкое', basis:'уроки 1.1–1.3', title:'Свой мини-сайт через Gemini CLI', desc:'Собрать через Gemini CLI одностраничный сайт для любой вымышленной услуги (кофейня, барбершоп, репетитор) — по аналогии с тем, что делали на уроке. Минимум: герой-блок, блок услуг с ценами, форма заявки, адаптив под телефон.', deliver:'Ссылка на запущенный сайт или скриншот + папка проекта.'},
+    {level:'лёгкое', basis:'урок 1.4', title:'Проект на GitHub с README', desc:'Залить любой свой проект на GitHub через изученный воркфлоу (init → commit → push). Оформить README: что за проект, как запустить, какими инструментами собран.', deliver:'Ссылка на репозиторий.'},
+    {level:'среднее', basis:'уроки 1.5–1.6', title:'Своё full-stack приложение по PRD+SPEC', desc:'Самостоятельно написать PRD, затем из него SPEC, и собрать небольшое full-stack приложение по образцу Salary App: например, трекер привычек, список расходов или учёт тренировок. Фронтенд через Gemini CLI, бэкенд через OpenCode.', deliver:'Папка проекта + текст своего PRD и SPEC отдельным файлом.'},
+    {level:'сложное', basis:'уроки 1.7–1.8', title:'Своя автоматизация в N8N + интерфейс', desc:'Собрать в N8N (локально, Community Edition) собственный сценарий автоматизации под реальную задачу — например: приём заявки → обработка ИИ → ответ пользователю, или генерация контента по запросу. Прикрутить простой фронтенд через Gemini CLI к вебхуку. Это «продаваемый» проект — подумать, кому такую автоматизацию можно продать.', deliver:'Скриншот workflow в N8N + ссылка/скриншот фронтенда + одно предложение: кому и за сколько это можно продать.'}
+  ],
   lessons:[
     { n:'1.1', title:'Знакомство с Google AI Studio и конструкторами Lovable, Replit, Base44',
       type:'Вводный',
@@ -454,6 +475,12 @@ const MODULES = [
   title:'AI-агенты и быстрые продукты',
   goal:'Научиться собирать ИИ-агентов и быстро создавать ликвидные продукты для первых заказов.',
   identity:'«Я фрилансер — беру первые заказы»',
+  homework:[
+    {level:'лёгкое', basis:'урок 2.1', title:'Свой Gemini Skill под задачу', desc:'Настроить собственный Skill под конкретную повторяющуюся задачу — например, генератор постов в едином стиле, проверка текста по чек-листу или ответы в фирменном тоне. Проверить, что Skill срабатывает и экономит время.', deliver:'Описание Skill (что делает) + 2–3 примера его работы.'},
+    {level:'лёгкое', basis:'урок 2.5', title:'AI-генератор контента для ниши', desc:'Собрать мини-приложение AI-генератор под конкретную нишу: описания товаров для маркетплейса, подписи к фото для салона, тексты объявлений. Должно принимать пару полей на входе и выдавать готовый текст.', deliver:'Ссылка/скриншот приложения + 3 сгенерированных примера.'},
+    {level:'среднее', basis:'уроки 2.6–2.7', title:'Конструктор резюме для реального человека', desc:'Собрать AI-конструктор резюме/портфолио и сделать в нём реальное резюме для друга или родственника с настоящими данными. Цель — чтобы человеку реально было не стыдно отправить работодателю.', deliver:'Ссылка на готовое резюме + обратная связь от того, для кого делали.'},
+    {level:'сложное', basis:'уроки 2.2–2.4, 2.8', title:'Продаваемый AI-продукт для бизнеса', desc:'На выбор: (а) собрать AI Support Agent для вымышленного или реального бизнеса, который отвечает на типовые вопросы клиентов; или (б) лендинг с AI-квизом и чатом, который квалифицирует заявку. Это первый «заказ» — оформить как для клиента.', deliver:'Рабочая ссылка + короткое коммерческое описание (что продукт делает и сколько за него можно просить).'}
+  ],
   lessons:[
     { n:'2.1', title:'Прокачиваем Gemini — внедряем Skills',
       type:'Инструменты',
@@ -603,6 +630,12 @@ const MODULES = [
   title:'Коммерческие приложения: база данных, оплата, подписки',
   goal:'Серьёзные приложения, за которые платят: база данных, авторизация, онлайн-оплата и подписки.',
   identity:'«Я делаю продукты, за которые платят»',
+  homework:[
+    {level:'лёгкое', basis:'уроки 3.1–3.2', title:'Система онлайн-записи для ниши', desc:'Собрать систему онлайн-записи под конкретную нишу (барбершоп, репетитор, мастер маникюра): выбор услуги, выбор времени, сохранение записи в базу данных, простая админка со списком записей.', deliver:'Ссылка/скриншоты + демонстрация: создать тестовую запись и показать её в админке.'},
+    {level:'среднее', basis:'уроки 3.3–3.4', title:'Приём оплаты в своём проекте', desc:'Добавить в любой свой проект из курса приём оплаты в тестовом режиме: Stripe (карты) плюс хотя бы один местный провайдер (Payme/Click/Multicard) на уровне понимания интеграции. Заказ должен сохраняться только после успешной оплаты.', deliver:'Демонстрация тестовой оплаты (тестовая карта) + скриншот сохранённого заказа.'},
+    {level:'сложное', basis:'уроки 3.5–3.6', title:'RAG-консультант по реальной базе знаний', desc:'Собрать AI-консультанта по реальному документу или набору данных: FAQ своей школы/работы, инструкция, прайс, база статей. Консультант должен отвечать строго по загруженной базе, а не выдумывать. Проверить на 5 каверзных вопросах.', deliver:'Ссылка + лог 5 вопросов-ответов, показывающих, что бот отвечает по базе.'},
+    {level:'сложное', basis:'уроки 3.7–3.8', title:'Превратить проект в платный SaaS', desc:'Взять любой свой проект и превратить его в платный SaaS с подпиской: тарифы (free/pro), ограничение функций для бесплатных, разблокировка после оплаты. Это вершина блока — продукт, который приносит деньги на автопилоте.', deliver:'Ссылка + описание тарифов + демонстрация перехода free → pro после оплаты.'}
+  ],
   lessons:[
     { n:'3.1', title:'AI-система онлайн-записи. Часть 1',
       type:'Проект',
@@ -749,6 +782,11 @@ const MODULES = [
   title:'Claude Code, MCP и выпускной проект',
   goal:'Апгрейд на топовый ИИ-агент и большой капстоун-проект под реальный бизнес.',
   identity:'«Я строю агентные системы — то, что умеют единицы»',
+  homework:[
+    {level:'лёгкое', basis:'уроки 4.1–4.2', title:'CLAUDE.md для своего проекта', desc:'Настроить Claude Code под один из своих проектов: написать файл CLAUDE.md с правилами проекта (стек, структура папок, стиль кода, что нельзя трогать). Проверить, что Claude Code следует этим правилам при выполнении задачи.', deliver:'Файл CLAUDE.md + пример задачи, где видно, что Claude учёл правила.'},
+    {level:'среднее', basis:'урок 4.3', title:'MCP-интеграция одной рутины', desc:'Подключить Claude через MCP к одному сервису (Google Sheets, Drive или GitHub) и автоматизировать одну реальную рутину: например, добавление строк в таблицу, разбор файлов или работа с issues. Должно работать по одной команде.', deliver:'Скриншот/запись: команда → результат в подключённом сервисе.'},
+    {level:'сложное', basis:'уроки 4.4–4.7', title:'Продвижение выпускного проекта', desc:'Между уроками довести свой выпускной проект до защиты: backend с агентами, хотя бы одна MCP-интеграция, фронтенд-дашборд и приём оплаты. Это не учебный пример, а продукт, который не стыдно показать клиенту или работодателю.', deliver:'Промежуточная демонстрация: что уже работает, что осталось до защиты 4.8.'}
+  ],
   lessons:[
     { n:'4.1', title:'Claude Code: апгрейд на топовый ИИ-агент',
       type:'Инструменты',
@@ -910,6 +948,13 @@ function buildNav(){
         <span class="lt">${esc(l.title)}<small>${esc(l.type)}</small></span>
       </button>`;
     });
+    if(m.homework && m.homework.length){
+      const hwSearch=('домашка домашнее задание дз homework блок '+m.id+' '+m.homework.map(t=>t.title).join(' ')).toLowerCase();
+      h+=`<button class="lessrow hwrow" data-id="hw${m.id}" data-search="${esc(hwSearch)}" onclick="showHomework(${m.id})">
+        <span class="lnum hwn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></span>
+        <span class="lt">Домашка блока ${m.id}<small>${m.homework.length} задания</small></span>
+      </button>`;
+    }
     h+=`</div>`;
   });
   nav.innerHTML=h;
@@ -993,6 +1038,37 @@ function showLesson(id){
 
   h+=`</div>`;
   main.innerHTML=h;
+  main.scrollTop=0;
+  closeMobileNav();
+}
+
+function showHomework(mid){
+  const m=MODULES.find(x=>x.id===mid); if(!m||!m.homework) return;
+  document.querySelectorAll('.lessrow').forEach(b=>b.classList.toggle('active',b.dataset.id==='hw'+mid));
+  document.getElementById('introBtn').classList.remove('active');
+  const lvl={'лёгкое':'easy','среднее':'med','сложное':'hard'};
+  let cards='';
+  m.homework.forEach((t,i)=>{
+    cards+=`<div class="hw ${lvl[t.level]||'easy'}">
+      <div class="hw-top">
+        <span class="hw-badge">${esc(t.level)}</span>
+        <span class="hw-basis">опирается на ${esc(t.basis)}</span>
+      </div>
+      <h4 class="hw-title">${i+1}. ${esc(t.title)}</h4>
+      <p class="hw-desc">${esc(t.desc)}</p>
+      ${t.deliver?`<div class="hw-deliver"><span>Что сдать:</span> ${esc(t.deliver)}</div>`:''}
+    </div>`;
+  });
+  main.innerHTML=`<div class="wrap ${m.cls}">
+    <div class="crumb"><span class="moddot"></span>Модуль ${m.id} · ${esc(m.month)} · Домашние задания</div>
+    <h2 class="ltitle">Домашка блока ${m.id}</h2>
+    <div class="meta"><span class="chip type">${m.homework.length} задания</span>
+      <span class="chip">${esc(m.identity)}</span></div>
+    <div class="sect" style="margin-top:18px"><div class="callout"><div class="cl">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+      Как давать домашку</div><p>Каждое задание опирается на то, что студент уже прошёл в этом блоке — он не делает ничего, чего не видел на уроке, только применяет это самостоятельно к своей теме. Лёгкие закрепляют один навык, среднее собирает несколько вместе, сложное — «продаваемый» проект для портфолио. Минимум для зачёта блока: одно лёгкое + одно сложное.</p></div></div>
+    <div class="hw-list">${cards}</div>
+  </div>`;
   main.scrollTop=0;
   closeMobileNav();
 }
